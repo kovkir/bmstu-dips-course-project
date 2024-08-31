@@ -3,6 +3,7 @@ from uuid import UUID
 
 from cruds.interfaces.ticket import ITicketCRUD
 from cruds.ticket import TicketCRUD
+from enums.auth import RoleEnum
 from enums.responses import RespEnum
 from enums.sort import SortTicket
 from enums.status import TicketStatus
@@ -12,6 +13,7 @@ from models.ticket import TicketModel
 from schemas.ticket import Ticket, TicketCreate, TicketFilter, TicketUpdate
 from services.ticket import TicketService
 from sqlalchemy.orm import Session
+from utils.auth_user import RoleChecker
 from utils.database import get_db
 
 
@@ -24,6 +26,8 @@ router = APIRouter(
     tags=["Ticket REST API operations"],
     responses={
         status.HTTP_400_BAD_REQUEST: RespEnum.InvalidData.value,
+        status.HTTP_401_UNAUTHORIZED: RespEnum.NotAuthorized.value,
+        status.HTTP_403_FORBIDDEN: RespEnum.Forbidden.value,
     },
 )
 
@@ -47,6 +51,9 @@ async def get_all_tickets(  # noqa: PLR0913
     sort_field: SortTicket = SortTicket.IdAsc,
     page: Annotated[int, Query(ge=1)] = 1,
     size: Annotated[int, Query(ge=1)] = 100,
+    _: bool = Depends(
+        RoleChecker(allowed_roles=[RoleEnum.USER, RoleEnum.MODERATOR]),
+    ),
 ) -> list[TicketModel]:
     return await TicketService(
         ticketCRUD=ticketCRUD,
@@ -78,6 +85,9 @@ async def get_ticket_by_uid(
     db: Annotated[Session, Depends(get_db)],
     ticketCRUD: Annotated[ITicketCRUD, Depends(get_ticket_crud)],
     ticket_uid: UUID,
+    _: bool = Depends(
+        RoleChecker(allowed_roles=[RoleEnum.USER, RoleEnum.MODERATOR]),
+    ),
 ) -> TicketModel:
     return await TicketService(
         ticketCRUD=ticketCRUD,
@@ -97,6 +107,9 @@ async def create_new_ticket(
     db: Annotated[Session, Depends(get_db)],
     ticketCRUD: Annotated[ITicketCRUD, Depends(get_ticket_crud)],
     ticket_create: TicketCreate,
+    _: bool = Depends(
+        RoleChecker(allowed_roles=[RoleEnum.USER, RoleEnum.MODERATOR]),
+    ),
 ) -> Response:
     ticket = await TicketService(
         ticketCRUD=ticketCRUD,
@@ -122,6 +135,9 @@ async def remove_ticket_by_uid(
     db: Annotated[Session, Depends(get_db)],
     ticketCRUD: Annotated[ITicketCRUD, Depends(get_ticket_crud)],
     ticket_uid: UUID,
+    _: bool = Depends(
+        RoleChecker(allowed_roles=[RoleEnum.USER, RoleEnum.MODERATOR]),
+    ),
 ) -> Response:
     await TicketService(
         ticketCRUD=ticketCRUD,
@@ -147,6 +163,9 @@ async def update_ticket_by_uid(
     ticketCRUD: Annotated[ITicketCRUD, Depends(get_ticket_crud)],
     ticket_uid: UUID,
     ticket_update: TicketUpdate,
+    _: bool = Depends(
+        RoleChecker(allowed_roles=[RoleEnum.USER, RoleEnum.MODERATOR]),
+    ),
 ) -> TicketModel:
     return await TicketService(
         ticketCRUD=ticketCRUD,
