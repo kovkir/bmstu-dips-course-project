@@ -3,6 +3,7 @@ from typing import Annotated
 
 from cruds.flight import FlightCRUD
 from cruds.interfaces.flight import IFlightCRUD
+from enums.auth import RoleEnum
 from enums.responses import RespFlightEnum
 from fastapi import APIRouter, Depends, Query, status
 from fastapi.responses import Response
@@ -10,6 +11,7 @@ from models.flight import FlightModel
 from schemas.flight import Flight, FlightCreate, FlightFilter
 from services.flight import FlightService
 from sqlalchemy.orm import Session
+from utils.auth_user import RoleChecker
 from utils.database import get_db
 
 
@@ -89,6 +91,8 @@ async def get_flight_by_id(
     response_class=Response,
     responses={
         status.HTTP_201_CREATED: RespFlightEnum.Created.value,
+        status.HTTP_401_UNAUTHORIZED: RespFlightEnum.NotAuthorized.value,
+        status.HTTP_403_FORBIDDEN: RespFlightEnum.Forbidden.value,
         status.HTTP_409_CONFLICT: RespFlightEnum.Conflict.value,
     },
 )
@@ -96,6 +100,9 @@ async def create_new_flight(
     db: Annotated[Session, Depends(get_db)],
     flightCRUD: Annotated[IFlightCRUD, Depends(get_flight_crud)],
     flight_create: FlightCreate,
+    _: bool = Depends(
+        RoleChecker(allowed_roles=[RoleEnum.MODERATOR]),
+    ),
 ) -> Response:
     flight = await FlightService(
         flightCRUD=flightCRUD,
@@ -114,6 +121,8 @@ async def create_new_flight(
     response_class=Response,
     responses={
         status.HTTP_204_NO_CONTENT: RespFlightEnum.Delete.value,
+        status.HTTP_401_UNAUTHORIZED: RespFlightEnum.NotAuthorized.value,
+        status.HTTP_403_FORBIDDEN: RespFlightEnum.Forbidden.value,
         status.HTTP_404_NOT_FOUND: RespFlightEnum.NotFound.value,
     },
 )
@@ -121,6 +130,9 @@ async def remove_flight_by_id(
     db: Annotated[Session, Depends(get_db)],
     flightCRUD: Annotated[IFlightCRUD, Depends(get_flight_crud)],
     flight_id: int,
+    _: bool = Depends(
+        RoleChecker(allowed_roles=[RoleEnum.MODERATOR]),
+    ),
 ) -> Response:
     await FlightService(
         flightCRUD=flightCRUD,
