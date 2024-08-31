@@ -26,3 +26,23 @@ class ValidationErrorResponse(BaseModel):
             },
         },
     )
+
+
+class ForbiddenResponse(BaseModel):
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "message": "Error: Forbidden",
+            },
+        },
+    )
+
+
+class NotAuthorizedResponse(BaseModel):
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "message": "Error: Not Authorized",
+            },
+        },
+    )

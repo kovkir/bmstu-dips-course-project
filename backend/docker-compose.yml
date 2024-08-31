@@ -55,6 +55,24 @@ services:
       timeout: 15s
       retries: 10
 
+  auth_database:
+    image: postgres:16-alpine
+    container_name: auth_database
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=auth_db
+    volumes:
+      - ./pg_data_auth:/var/lib/postgresql/data
+      # - ./auth_service/sql/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+    networks:
+      - default
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 20s
+      timeout: 15s
+      retries: 10
+
   bonus_service:
     image: bonus_service
     container_name: bonus_service
@@ -97,6 +115,20 @@ services:
       ticket_database:
         condition: service_healthy
 
+  auth_service:
+    image: auth_service
+    container_name: auth_service
+    build:
+      context: "."
+      dockerfile: ./docker/auth.Dockerfile
+    ports:
+      - "8888:8888"
+    networks:
+      - default
+    depends_on:
+      auth_database:
+        condition: service_healthy
+
   gateway_service:
     image: gateway_service
     container_name: gateway_service
@@ -114,6 +146,8 @@ volumes:
   pg_data_flight:
     driver: local
   pg_data_ticket:
+    driver: local
+  pg_data_auth:
     driver: local
 
 networks:

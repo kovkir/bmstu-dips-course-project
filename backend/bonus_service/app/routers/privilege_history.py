@@ -3,6 +3,7 @@ from uuid import UUID
 
 from cruds.interfaces.privilege_history import IPrivilegeHistoryCRUD
 from cruds.privilege_history import PrivilegeHistoryCRUD
+from enums.auth import RoleEnum
 from enums.responses import RespPrivilegeHistoryEnum
 from fastapi import APIRouter, Depends, Query, status
 from fastapi.responses import Response
@@ -14,6 +15,7 @@ from schemas.privilege_history import (
 )
 from services.privilege_history import PrivilegeHistoryService
 from sqlalchemy.orm import Session
+from utils.auth_user import RoleChecker
 from utils.database import get_db
 
 
@@ -26,6 +28,8 @@ router = APIRouter(
     tags=["Privilege History REST API operations"],
     responses={
         status.HTTP_400_BAD_REQUEST: RespPrivilegeHistoryEnum.InvalidData.value,  # noqa: E501
+        status.HTTP_401_UNAUTHORIZED: RespPrivilegeHistoryEnum.NotAuthorized.value,  # noqa: E501
+        status.HTTP_403_FORBIDDEN: RespPrivilegeHistoryEnum.Forbidden.value,
     },
 )
 
@@ -46,6 +50,9 @@ async def get_all_privilege_histories(
     ],
     privilege_id: Annotated[int | None, Query(ge=1)] = None,
     ticket_uid: UUID | None = None,
+    _: bool = Depends(
+        RoleChecker(allowed_roles=[RoleEnum.USER, RoleEnum.MODERATOR]),
+    ),
 ) -> list[PrivilegeHistoryModel]:
     return await PrivilegeHistoryService(
         privilegeHistoryCRUD=privilegeHistoryCRUD,
@@ -74,6 +81,9 @@ async def get_privilege_history_by_id(
         Depends(get_privilege_history_crud),
     ],
     privilege_history_id: int,
+    _: bool = Depends(
+        RoleChecker(allowed_roles=[RoleEnum.USER, RoleEnum.MODERATOR]),
+    ),
 ) -> PrivilegeHistoryModel:
     return await PrivilegeHistoryService(
         privilegeHistoryCRUD=privilegeHistoryCRUD,
@@ -97,6 +107,9 @@ async def create_new_privilege_history(
         Depends(get_privilege_history_crud),
     ],
     privilege_history_create: PrivilegeHistoryCreate,
+    _: bool = Depends(
+        RoleChecker(allowed_roles=[RoleEnum.USER, RoleEnum.MODERATOR]),
+    ),
 ) -> Response:
     privilege_history = await PrivilegeHistoryService(
         privilegeHistoryCRUD=privilegeHistoryCRUD,
@@ -127,6 +140,9 @@ async def remove_privilege_history_by_id(
         Depends(get_privilege_history_crud),
     ],
     privilege_history_id: int,
+    _: bool = Depends(
+        RoleChecker(allowed_roles=[RoleEnum.USER, RoleEnum.MODERATOR]),
+    ),
 ) -> Response:
     await PrivilegeHistoryService(
         privilegeHistoryCRUD=privilegeHistoryCRUD,

@@ -2,6 +2,7 @@ from typing import Annotated
 
 from cruds.interfaces.privilege import IPrivilegeCRUD
 from cruds.privilege import PrivilegeCRUD
+from enums.auth import RoleEnum
 from enums.responses import RespPrivilegeEnum
 from enums.status import PrivilegeStatus
 from fastapi import APIRouter, Depends, Query, status
@@ -15,6 +16,7 @@ from schemas.privilege import (
 )
 from services.privilege import PrivilegeService
 from sqlalchemy.orm import Session
+from utils.auth_user import RoleChecker
 from utils.database import get_db
 
 
@@ -27,6 +29,8 @@ router = APIRouter(
     tags=["Privilege REST API operations"],
     responses={
         status.HTTP_400_BAD_REQUEST: RespPrivilegeEnum.InvalidData.value,
+        status.HTTP_401_UNAUTHORIZED: RespPrivilegeEnum.NotAuthorized.value,
+        status.HTTP_403_FORBIDDEN: RespPrivilegeEnum.Forbidden.value,
     },
 )
 
@@ -46,6 +50,9 @@ async def get_all_privileges(  # noqa: PLR0913
     status: PrivilegeStatus | None = None,
     page: Annotated[int, Query(ge=1)] = 1,
     size: Annotated[int, Query(ge=1)] = 100,
+    _: bool = Depends(
+        RoleChecker(allowed_roles=[RoleEnum.USER, RoleEnum.MODERATOR]),
+    ),
 ) -> list[PrivilegeModel]:
     return await PrivilegeService(
         privilegeCRUD=privilegeCRUD,
@@ -73,6 +80,9 @@ async def get_privilege_by_id(
     db: Annotated[Session, Depends(get_db)],
     privilegeCRUD: Annotated[IPrivilegeCRUD, Depends(get_privilege_crud)],
     privilege_id: int,
+    _: bool = Depends(
+        RoleChecker(allowed_roles=[RoleEnum.USER, RoleEnum.MODERATOR]),
+    ),
 ) -> PrivilegeModel:
     return await PrivilegeService(
         privilegeCRUD=privilegeCRUD,
@@ -93,6 +103,9 @@ async def create_new_privilege(
     db: Annotated[Session, Depends(get_db)],
     privilegeCRUD: Annotated[IPrivilegeCRUD, Depends(get_privilege_crud)],
     privilege_create: PrivilegeCreate,
+    _: bool = Depends(
+        RoleChecker(allowed_roles=[RoleEnum.USER, RoleEnum.MODERATOR]),
+    ),
 ) -> Response:
     privilege = await PrivilegeService(
         privilegeCRUD=privilegeCRUD,
@@ -118,6 +131,9 @@ async def remove_privilege_by_id(
     db: Annotated[Session, Depends(get_db)],
     privilegeCRUD: Annotated[IPrivilegeCRUD, Depends(get_privilege_crud)],
     privilege_id: int,
+    _: bool = Depends(
+        RoleChecker(allowed_roles=[RoleEnum.USER, RoleEnum.MODERATOR]),
+    ),
 ) -> Response:
     await PrivilegeService(
         privilegeCRUD=privilegeCRUD,
@@ -143,6 +159,9 @@ async def update_privilege_by_id(
     privilegeCRUD: Annotated[IPrivilegeCRUD, Depends(get_privilege_crud)],
     privilege_id: int,
     privilege_update: PrivilegeUpdate,
+    _: bool = Depends(
+        RoleChecker(allowed_roles=[RoleEnum.USER, RoleEnum.MODERATOR]),
+    ),
 ) -> PrivilegeModel:
     return await PrivilegeService(
         privilegeCRUD=privilegeCRUD,
