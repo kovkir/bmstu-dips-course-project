@@ -14,7 +14,7 @@ class CircuitBreaker:
     _waiter: Thread | None = None
 
     @staticmethod
-    def send_request(  # noqa: PLR0913
+    def send_request(
         url: str,
         http_method,  # noqa: ANN001
         headers: dict = {},

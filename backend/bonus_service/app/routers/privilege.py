@@ -43,7 +43,7 @@ router = APIRouter(
         status.HTTP_200_OK: RespPrivilegeEnum.GetAll.value,
     },
 )
-async def get_all_privileges(  # noqa: PLR0913
+async def get_all_privileges(
     db: Annotated[Session, Depends(get_db)],
     privilegeCRUD: Annotated[IPrivilegeCRUD, Depends(get_privilege_crud)],
     username: Annotated[str | None, Query(max_length=80)] = None,

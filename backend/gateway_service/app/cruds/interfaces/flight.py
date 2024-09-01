@@ -12,5 +12,8 @@ class IFlightCRUD(ABC):
         pass
 
     @abstractmethod
-    async def get_airport_by_id(self, airport_id: int) -> dict:
+    async def get_airport_by_id(
+        self,
+        airport_id: int,
+    ) -> dict:
         pass

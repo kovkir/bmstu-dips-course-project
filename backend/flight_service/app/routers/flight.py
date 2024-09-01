@@ -36,7 +36,7 @@ router = APIRouter(
         status.HTTP_200_OK: RespFlightEnum.GetAll.value,
     },
 )
-async def get_all_flights(  # noqa: PLR0913
+async def get_all_flights(
     db: Annotated[Session, Depends(get_db)],
     flightCRUD: Annotated[IFlightCRUD, Depends(get_flight_crud)],
     flight_number: Annotated[str | None, Query(max_length=20)] = None,

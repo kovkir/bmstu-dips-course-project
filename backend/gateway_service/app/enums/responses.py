@@ -1,6 +1,11 @@
 from enum import Enum
 
-from schemas.response import ErrorResponse, ValidationErrorResponse
+from schemas.response import (
+    ErrorResponse,
+    ForbiddenResponse,
+    NotAuthorizedResponse,
+    ValidationErrorResponse,
+)
 
 
 class RespEnum(Enum):
@@ -42,4 +47,12 @@ class RespEnum(Enum):
     InvalidData = {
         "model": ValidationErrorResponse,
         "description": "Ошибка валидации данных",
+    }
+    NotAuthorized = {
+        "model": NotAuthorizedResponse,
+        "description": "User is not authorized",
+    }
+    Forbidden = {
+        "model": ForbiddenResponse,
+        "description": "Method forbidden to access",
     }

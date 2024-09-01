@@ -40,7 +40,7 @@ router = APIRouter(
         status.HTTP_200_OK: RespEnum.GetAll.value,
     },
 )
-async def get_all_tickets(  # noqa: PLR0913
+async def get_all_tickets(
     db: Annotated[Session, Depends(get_db)],
     ticketCRUD: Annotated[ITicketCRUD, Depends(get_ticket_crud)],
     username: Annotated[str | None, Query(max_length=80)] = None,

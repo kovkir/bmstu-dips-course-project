@@ -9,6 +9,7 @@ from exceptions.http_exceptions import (
     NotFoundException,
     ServiceUnavailableException,
 )
+from fastapi.security import HTTPAuthorizationCredentials
 from schemas.bonus import (
     BalanceHistory,
     PrivilegeCreate,
@@ -37,10 +38,11 @@ class GatewayService:
         flightCRUD: type[IFlightCRUD],
         ticketCRUD: type[ITicketCRUD],
         bonusCRUD: type[IBonusCRUD],
+        token: HTTPAuthorizationCredentials | None = None,
     ) -> None:
         self._flightCRUD = flightCRUD()
-        self._ticketCRUD = ticketCRUD()
-        self._bonusCRUD = bonusCRUD()
+        self._ticketCRUD = ticketCRUD(token)
+        self._bonusCRUD = bonusCRUD(token)
 
         settings = get_settings()
         gateway_host = settings["services"]["gateway"]["host"]

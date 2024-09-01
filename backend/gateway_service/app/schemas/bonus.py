@@ -1,4 +1,5 @@
 from datetime import datetime as dt
+from typing import Annotated
 from uuid import UUID
 
 from enums.status import PrivilegeHistoryStatus, PrivilegeStatus
@@ -10,7 +11,7 @@ def convert_datetime(datetime: dt) -> str:
 
 
 class PrivilegeShortInfo(BaseModel):
-    balance: conint(ge=0)
+    balance: Annotated[int, conint(ge=0)]
     status: PrivilegeStatus
 
 
@@ -27,20 +28,20 @@ class BalanceHistory(BaseModel):
 
 
 class PrivilegeInfoResponse(BaseModel):
-    balance: conint(ge=0)
+    balance: Annotated[int, conint(ge=0)]
     status: PrivilegeStatus
     history: list[BalanceHistory]
 
 
 class PrivilegeCreate(BaseModel):
-    username: constr(max_length=80)
+    username: Annotated[str, constr(max_length=80)]
     status: PrivilegeStatus = "BRONZE"
-    balance: conint(ge=0) | None = None
+    balance: Annotated[int, conint(ge=0)] | None = None
 
 
 class PrivilegeUpdate(BaseModel):
     status: PrivilegeStatus | None = None
-    balance: conint(ge=0) | None = None
+    balance: Annotated[int, conint(ge=0)] | None = None
 
 
 class PrivilegeHistoryCreate(BaseModel):

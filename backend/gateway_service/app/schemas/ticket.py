@@ -1,4 +1,5 @@
 from datetime import datetime as dt
+from typing import Annotated
 from uuid import UUID
 
 from enums.status import TicketStatus
@@ -17,11 +18,11 @@ def convert_datetime(datetime: dt | str) -> str:
 
 class TicketResponse(BaseModel):
     ticketUid: UUID
-    flightNumber: constr(max_length=20)
+    flightNumber: Annotated[str, constr(max_length=20)]
     fromAirport: str | None
     toAirport: str | None
     date: dt | str
-    price: conint(ge=1)
+    price: Annotated[int, conint(ge=1)]
     status: TicketStatus
 
     class Config:
@@ -31,20 +32,20 @@ class TicketResponse(BaseModel):
 
 
 class TicketPurchaseRequest(BaseModel):
-    flightNumber: constr(max_length=20)
-    price: conint(ge=1)
+    flightNumber: Annotated[str, constr(max_length=20)]
+    price: Annotated[int, conint(ge=1)]
     paidFromBalance: bool
 
 
 class TicketPurchaseResponse(BaseModel):
     ticketUid: UUID
-    flightNumber: constr(max_length=20)
+    flightNumber: Annotated[str, constr(max_length=20)]
     fromAirport: str | None
     toAirport: str | None
     date: dt | str
-    price: conint(ge=1)
-    paidByMoney: conint(ge=0)
-    paidByBonuses: conint(ge=0)
+    price: Annotated[int, conint(ge=1)]
+    paidByMoney: Annotated[int, conint(ge=0)]
+    paidByBonuses: Annotated[int, conint(ge=0)]
     status: TicketStatus
     privilege: PrivilegeShortInfo
 
@@ -55,9 +56,9 @@ class TicketPurchaseResponse(BaseModel):
 
 
 class TicketCreate(BaseModel):
-    username: constr(max_length=80)
-    flight_number: constr(max_length=20)
-    price: conint(ge=0)
+    username: Annotated[str, constr(max_length=80)]
+    flight_number: Annotated[str, constr(max_length=20)]
+    price: Annotated[int, conint(ge=0)]
     status: TicketStatus
 
 

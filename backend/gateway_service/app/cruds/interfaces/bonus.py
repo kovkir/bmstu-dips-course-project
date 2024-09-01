@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+from fastapi.security import HTTPAuthorizationCredentials
 from schemas.bonus import (
     PrivilegeCreate,
     PrivilegeHistoryCreate,
@@ -9,6 +10,12 @@ from schemas.bonus import (
 
 
 class IBonusCRUD(ABC):
+    def __init__(
+        self,
+        token: HTTPAuthorizationCredentials | None,
+    ) -> None:
+        self.token = token
+
     @abstractmethod
     async def get_all_privileges(
         self,
@@ -19,7 +26,10 @@ class IBonusCRUD(ABC):
         pass
 
     @abstractmethod
-    async def get_privilege_by_id(self, privilege_id: int) -> dict:
+    async def get_privilege_by_id(
+        self,
+        privilege_id: int,
+    ) -> dict:
         pass
 
     @abstractmethod

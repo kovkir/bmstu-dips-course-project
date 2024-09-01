@@ -7,9 +7,11 @@ from cruds.interfaces.bonus import IBonusCRUD
 from cruds.interfaces.flight import IFlightCRUD
 from cruds.interfaces.ticket import ITicketCRUD
 from cruds.ticket import TicketCRUD
+from enums.auth import RoleEnum
 from enums.responses import RespEnum
 from fastapi import APIRouter, Depends, Header, Query, status
 from fastapi.responses import Response
+from fastapi.security import HTTPAuthorizationCredentials
 from schemas.bonus import PrivilegeInfoResponse
 from schemas.flight import PaginationResponse
 from schemas.ticket import (
@@ -19,6 +21,7 @@ from schemas.ticket import (
 )
 from schemas.user import UserInfoResponse
 from services.gateway import GatewayService
+from utils.auth_user import RoleChecker, http_bearer
 
 
 def get_flight_crud() -> type[IFlightCRUD]:
@@ -72,6 +75,8 @@ async def get_list_of_flights(
     response_model=list[TicketResponse],
     responses={
         status.HTTP_200_OK: RespEnum.GetAllTickets.value,
+        status.HTTP_401_UNAUTHORIZED: RespEnum.NotAuthorized.value,
+        status.HTTP_403_FORBIDDEN: RespEnum.Forbidden.value,
     },
 )
 async def get_information_on_all_user_tickets(
@@ -79,11 +84,16 @@ async def get_information_on_all_user_tickets(
     ticketCRUD: Annotated[ITicketCRUD, Depends(get_ticket_crud)],
     bonusCRUD: Annotated[IBonusCRUD, Depends(get_bonus_crud)],
     X_User_Name: Annotated[str, Header(max_length=80)],
+    token: HTTPAuthorizationCredentials | None = Depends(http_bearer),
+    _: bool = Depends(
+        RoleChecker(allowed_roles=[RoleEnum.USER, RoleEnum.MODERATOR]),
+    ),
 ) -> list[TicketResponse]:
     return await GatewayService(
         flightCRUD=flightCRUD,
         ticketCRUD=ticketCRUD,
         bonusCRUD=bonusCRUD,
+        token=token,
     ).get_info_on_all_user_tickets(
         user_name=X_User_Name,
     )
@@ -104,11 +114,16 @@ async def get_information_on_user_ticket(
     bonusCRUD: Annotated[IBonusCRUD, Depends(get_bonus_crud)],
     X_User_Name: Annotated[str, Header(max_length=80)],
     ticketUid: UUID,
+    token: HTTPAuthorizationCredentials | None = Depends(http_bearer),
+    _: bool = Depends(
+        RoleChecker(allowed_roles=[RoleEnum.USER, RoleEnum.MODERATOR]),
+    ),
 ) -> TicketResponse:
     return await GatewayService(
         flightCRUD=flightCRUD,
         ticketCRUD=ticketCRUD,
         bonusCRUD=bonusCRUD,
+        token=token,
     ).get_info_on_user_ticket(
         user_name=X_User_Name,
         ticket_uid=ticketUid,
@@ -121,6 +136,8 @@ async def get_information_on_user_ticket(
     response_model=TicketPurchaseResponse,
     responses={
         status.HTTP_200_OK: RespEnum.BuyTicket.value,
+        status.HTTP_401_UNAUTHORIZED: RespEnum.NotAuthorized.value,
+        status.HTTP_403_FORBIDDEN: RespEnum.Forbidden.value,
         status.HTTP_404_NOT_FOUND: RespEnum.FlightNumberNotFound.value,
     },
 )
@@ -130,11 +147,16 @@ async def buy_ticket(
     bonusCRUD: Annotated[IBonusCRUD, Depends(get_bonus_crud)],
     X_User_Name: Annotated[str, Header(max_length=80)],
     ticket_purchase_request: TicketPurchaseRequest,
+    token: HTTPAuthorizationCredentials | None = Depends(http_bearer),
+    _: bool = Depends(
+        RoleChecker(allowed_roles=[RoleEnum.USER, RoleEnum.MODERATOR]),
+    ),
 ) -> TicketPurchaseResponse:
     return await GatewayService(
         flightCRUD=flightCRUD,
         ticketCRUD=ticketCRUD,
         bonusCRUD=bonusCRUD,
+        token=token,
     ).buy_ticket(
         user_name=X_User_Name,
         ticket_purchase_request=ticket_purchase_request,
@@ -147,6 +169,8 @@ async def buy_ticket(
     response_class=Response,
     responses={
         status.HTTP_204_NO_CONTENT: RespEnum.TicketRefund.value,
+        status.HTTP_401_UNAUTHORIZED: RespEnum.NotAuthorized.value,
+        status.HTTP_403_FORBIDDEN: RespEnum.Forbidden.value,
         status.HTTP_404_NOT_FOUND: RespEnum.TicketNotFound.value,
     },
 )
@@ -156,11 +180,16 @@ async def ticket_refund(
     bonusCRUD: Annotated[IBonusCRUD, Depends(get_bonus_crud)],
     X_User_Name: Annotated[str, Header(max_length=80)],
     ticketUid: UUID,
+    token: HTTPAuthorizationCredentials | None = Depends(http_bearer),
+    _: bool = Depends(
+        RoleChecker(allowed_roles=[RoleEnum.USER, RoleEnum.MODERATOR]),
+    ),
 ) -> Response:
     await GatewayService(
         flightCRUD=flightCRUD,
         ticketCRUD=ticketCRUD,
         bonusCRUD=bonusCRUD,
+        token=token,
     ).ticket_refund(
         user_name=X_User_Name,
         ticket_uid=ticketUid,
@@ -177,6 +206,8 @@ async def ticket_refund(
     response_model=UserInfoResponse,
     responses={
         status.HTTP_200_OK: RespEnum.GetMe.value,
+        status.HTTP_401_UNAUTHORIZED: RespEnum.NotAuthorized.value,
+        status.HTTP_403_FORBIDDEN: RespEnum.Forbidden.value,
     },
 )
 async def get_user_information(
@@ -184,11 +215,16 @@ async def get_user_information(
     ticketCRUD: Annotated[ITicketCRUD, Depends(get_ticket_crud)],
     bonusCRUD: Annotated[IBonusCRUD, Depends(get_bonus_crud)],
     X_User_Name: Annotated[str, Header(max_length=80)],
+    token: HTTPAuthorizationCredentials | None = Depends(http_bearer),
+    _: bool = Depends(
+        RoleChecker(allowed_roles=[RoleEnum.USER, RoleEnum.MODERATOR]),
+    ),
 ) -> UserInfoResponse:
     return await GatewayService(
         flightCRUD=flightCRUD,
         ticketCRUD=ticketCRUD,
         bonusCRUD=bonusCRUD,
+        token=token,
     ).get_user_information(
         user_name=X_User_Name,
     )
@@ -200,6 +236,8 @@ async def get_user_information(
     response_model=PrivilegeInfoResponse,
     responses={
         status.HTTP_200_OK: RespEnum.GetPrivilege.value,
+        status.HTTP_401_UNAUTHORIZED: RespEnum.NotAuthorized.value,
+        status.HTTP_403_FORBIDDEN: RespEnum.Forbidden.value,
     },
 )
 async def get_information_about_bonus_account(
@@ -207,11 +245,16 @@ async def get_information_about_bonus_account(
     ticketCRUD: Annotated[ITicketCRUD, Depends(get_ticket_crud)],
     bonusCRUD: Annotated[IBonusCRUD, Depends(get_bonus_crud)],
     X_User_Name: Annotated[str, Header(max_length=80)],
+    token: HTTPAuthorizationCredentials | None = Depends(http_bearer),
+    _: bool = Depends(
+        RoleChecker(allowed_roles=[RoleEnum.USER, RoleEnum.MODERATOR]),
+    ),
 ) -> PrivilegeInfoResponse:
     return await GatewayService(
         flightCRUD=flightCRUD,
         ticketCRUD=ticketCRUD,
         bonusCRUD=bonusCRUD,
+        token=token,
     ).get_info_about_bonus_account(
         user_name=X_User_Name,
     )
