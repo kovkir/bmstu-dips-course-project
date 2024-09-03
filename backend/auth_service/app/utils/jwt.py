@@ -31,7 +31,11 @@ class AuthJWT:
         user: UserModel,
     ) -> str:
         jwt_header = AuthJWT.__create_header()
-        jwt_payload = AuthJWT.__create_payload(user, TokenTypeEnum.REFRESH)
+        jwt_payload = AuthJWT.__create_payload(
+            user,
+            TokenTypeEnum.REFRESH,
+            expire_minutes=settings.options.auth_jwt.refresh_token_expire_minutes,
+        )
 
         return AuthJWT.encode_jwt(
             header=jwt_header,
