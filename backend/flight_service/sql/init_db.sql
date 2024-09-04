@@ -115,6 +115,9 @@ ALTER TABLE ONLY public.flight ALTER COLUMN id SET DEFAULT nextval('public.fligh
 COPY public.airport (id, name, city, country) FROM stdin;
 1	Шереметьево	Москва	Россия
 2	Пулково	Санкт-Петербург	Россия
+3	Адлер	Сочи	Россия
+4	Стригино	Нижний Новгород	Россия
+5	Домодедово	Москва	Россия
 \.
 
 
@@ -124,6 +127,30 @@ COPY public.airport (id, name, city, country) FROM stdin;
 
 COPY public.flight (id, flight_number, price, datetime, from_airport_id, to_airport_id) FROM stdin;
 1	AFL031	1500	2021-10-08 20:00:00+00	2	1
+2	SU1226	4800	2024-09-09 12:00:00+00	1	4
+3	S72046	3900	2024-08-06 20:00:00+00	3	1
+4	SU6190	5600	2024-08-15 06:00:00+00	4	1
+5	S72051	6700	2024-08-20 20:00:00+00	2	4
+6	SU6039	8500	2024-08-13 20:00:00+00	5	2
+7	S72053	2500	2024-08-14 20:00:00+00	1	2
+8	U6-256	3700	2024-08-14 20:30:00+00	1	3
+9	SU1890	7400	2024-08-14 18:00:00+00	3	4
+10	U6-2803	3300	2024-12-31 20:00:00+00	4	3
+11	AFL032	1500	2021-10-08 20:00:00+00	2	1
+12	SU1227	4800	2024-09-09 12:00:00+00	5	4
+13	S72047	3900	2024-08-06 20:00:00+00	3	1
+14	SU6191	5600	2024-08-15 06:00:00+00	4	5
+15	S72052	6700	2024-08-20 20:00:00+00	2	4
+16	SU6040	8500	2024-08-13 20:00:00+00	3	2
+17	S72054	2500	2024-08-14 20:00:00+00	1	2
+18	U6-257	3700	2024-08-14 20:30:00+00	5	3
+19	SU1891	7400	2024-08-14 18:00:00+00	3	4
+20	U6-2804	3300	2024-12-31 20:00:00+00	4	3
+21	AFL033	1500	2021-10-08 20:00:00+00	2	5
+22	SU1228	4800	2024-09-09 12:00:00+00	1	4
+23	S72048	3900	2024-08-06 20:00:00+00	3	1
+24	SU6192	5600	2024-08-15 06:00:00+00	4	5
+25	S72062	6700	2024-08-20 20:00:00+00	2	4
 \.
 
 
@@ -131,14 +158,14 @@ COPY public.flight (id, flight_number, price, datetime, from_airport_id, to_airp
 -- Name: airport_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.airport_id_seq', 2, true);
+SELECT pg_catalog.setval('public.airport_id_seq', 5, true);
 
 
 --
 -- Name: flight_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.flight_id_seq', 1, true);
+SELECT pg_catalog.setval('public.flight_id_seq', 25, true);
 
 
 --

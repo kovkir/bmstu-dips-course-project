@@ -1,4 +1,5 @@
 from cruds.interfaces.flight import IFlightCRUD
+from enums.sort import SortFlights
 from exceptions.http_exceptions import ConflictException, NotFoundException
 from models.flight import FlightModel
 from schemas.flight import FlightCreate, FlightFilter
@@ -12,11 +13,13 @@ class FlightService:
     async def get_all(
         self,
         flight_filter: FlightFilter,
+        sort: SortFlights,
         page: int = 1,
         size: int = 100,
     ) -> list[FlightModel]:
         return await self._flightCRUD.get_all(
             flight_filter=flight_filter,
+            sort=sort,
             offset=(page - 1) * size,
             limit=size,
         )

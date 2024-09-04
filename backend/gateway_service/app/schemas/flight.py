@@ -8,6 +8,16 @@ def convert_datetime(datetime: dt) -> str:
     return datetime.strftime("%Y-%m-%d %H:%M")
 
 
+class FlightFilter(BaseModel):
+    flightNumber: Annotated[str, constr(max_length=20)] | None = None
+    minPrice: Annotated[int, conint(ge=1)] | None = None
+    maxPrice: Annotated[int, conint(ge=1)] | None = None
+    minDatetime: dt | None = None
+    maxDatetime: dt | None = None
+    fromAirport: Annotated[str, constr(max_length=80)] | None = None
+    toAirport: Annotated[str, constr(max_length=80)] | None = None
+
+
 class FlightResponse(BaseModel):
     flightNumber: Annotated[str, constr(max_length=20)]
     fromAirport: str | None

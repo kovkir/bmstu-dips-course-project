@@ -1,3 +1,4 @@
+from datetime import datetime as dt
 from typing import Annotated
 from uuid import UUID
 
@@ -9,11 +10,12 @@ from cruds.interfaces.ticket import ITicketCRUD
 from cruds.ticket import TicketCRUD
 from enums.auth import RoleEnum
 from enums.responses import RespEnum
+from enums.sort import SortFlightsShift
 from fastapi import APIRouter, Depends, Header, Query, status
 from fastapi.responses import Response
 from fastapi.security import HTTPAuthorizationCredentials
 from schemas.bonus import PrivilegeInfoResponse
-from schemas.flight import PaginationResponse
+from schemas.flight import FlightFilter, PaginationResponse
 from schemas.ticket import (
     TicketPurchaseRequest,
     TicketPurchaseResponse,
@@ -56,6 +58,14 @@ async def get_list_of_flights(
     flightCRUD: Annotated[IFlightCRUD, Depends(get_flight_crud)],
     ticketCRUD: Annotated[ITicketCRUD, Depends(get_ticket_crud)],
     bonusCRUD: Annotated[IBonusCRUD, Depends(get_bonus_crud)],
+    flightNumber: Annotated[str | None, Query(max_length=20)] = None,
+    minPrice: Annotated[int | None, Query(ge=1)] = None,
+    maxPrice: Annotated[int | None, Query(ge=1)] = None,
+    minDatetime: dt | None = None,
+    maxDatetime: dt | None = None,
+    fromAirport: Annotated[str | None, Query(max_length=80)] = None,
+    toAirport: Annotated[str | None, Query(max_length=80)] = None,
+    sort: SortFlightsShift = SortFlightsShift.IdAsc,
     page: Annotated[int, Query(ge=1)] = 1,
     size: Annotated[int, Query(ge=1)] = 100,
 ) -> PaginationResponse:
@@ -64,6 +74,16 @@ async def get_list_of_flights(
         ticketCRUD=ticketCRUD,
         bonusCRUD=bonusCRUD,
     ).get_list_of_flights(
+        flight_filter=FlightFilter(
+            flightNumber=flightNumber,
+            minPrice=minPrice,
+            maxPrice=maxPrice,
+            minDatetime=minDatetime,
+            maxDatetime=maxDatetime,
+            fromAirport=fromAirport,
+            toAirport=toAirport,
+        ),
+        sort=sort,
         page=page,
         size=size,
     )

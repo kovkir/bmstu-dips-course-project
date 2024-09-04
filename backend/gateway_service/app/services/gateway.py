@@ -4,6 +4,7 @@ import requests
 from cruds.interfaces.bonus import IBonusCRUD
 from cruds.interfaces.flight import IFlightCRUD
 from cruds.interfaces.ticket import ITicketCRUD
+from enums.sort import SortFlightsShift
 from enums.status import PrivilegeHistoryStatus, PrivilegeStatus, TicketStatus
 from exceptions.http_exceptions import (
     NotFoundException,
@@ -19,7 +20,7 @@ from schemas.bonus import (
     PrivilegeShortInfo,
     PrivilegeUpdate,
 )
-from schemas.flight import FlightResponse, PaginationResponse
+from schemas.flight import FlightFilter, FlightResponse, PaginationResponse
 from schemas.ticket import (
     TicketCreate,
     TicketPurchaseRequest,
@@ -52,10 +53,14 @@ class GatewayService:
 
     async def get_list_of_flights(
         self,
+        flight_filter: FlightFilter,
+        sort: SortFlightsShift,
         page: int,
         size: int,
     ) -> PaginationResponse:
         flight_list = await self._flightCRUD.get_all_flights(
+            flight_filter=flight_filter,
+            sort=sort,
             page=page,
             size=size,
         )
@@ -415,7 +420,9 @@ class GatewayService:
 
     async def __get_flight_by_number(self, flight_number: str) -> dict | None:
         flight_list = await self._flightCRUD.get_all_flights(
-            flight_number=flight_number,
+            flight_filter=FlightFilter(
+                flightNumber=flight_number,
+            ),
         )
         return flight_list[0] if len(flight_list) else None
 

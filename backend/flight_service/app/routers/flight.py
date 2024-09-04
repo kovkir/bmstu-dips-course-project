@@ -5,6 +5,7 @@ from cruds.flight import FlightCRUD
 from cruds.interfaces.flight import IFlightCRUD
 from enums.auth import RoleEnum
 from enums.responses import RespFlightEnum
+from enums.sort import SortFlights
 from fastapi import APIRouter, Depends, Query, status
 from fastapi.responses import Response
 from models.flight import FlightModel
@@ -42,9 +43,11 @@ async def get_all_flights(
     flight_number: Annotated[str | None, Query(max_length=20)] = None,
     min_price: Annotated[int | None, Query(ge=1)] = None,
     max_price: Annotated[int | None, Query(ge=1)] = None,
-    datetime: dt | None = None,
-    from_airport_id: Annotated[int | None, Query(ge=1)] = None,
-    to_airport_id: Annotated[int | None, Query(ge=1)] = None,
+    min_datetime: dt | None = None,
+    max_datetime: dt | None = None,
+    from_airport: Annotated[str | None, Query(max_length=80)] = None,
+    to_airport: Annotated[str | None, Query(max_length=80)] = None,
+    sort: SortFlights = SortFlights.IdAsc,
     page: Annotated[int, Query(ge=1)] = 1,
     size: Annotated[int, Query(ge=1)] = 100,
 ) -> list[FlightModel]:
@@ -56,10 +59,12 @@ async def get_all_flights(
             flight_number=flight_number,
             min_price=min_price,
             max_price=max_price,
-            datetime=datetime,
-            from_airport_id=from_airport_id,
-            to_airport_id=to_airport_id,
+            min_datetime=min_datetime,
+            max_datetime=max_datetime,
+            from_airport=from_airport,
+            to_airport=to_airport,
         ),
+        sort=sort,
         page=page,
         size=size,
     )

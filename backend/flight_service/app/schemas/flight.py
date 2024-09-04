@@ -20,9 +20,10 @@ class FlightFilter(BaseModel):
     flight_number: Annotated[str, constr(max_length=20)] | None = None
     min_price: Annotated[int, conint(ge=1)] | None = None
     max_price: Annotated[int, conint(ge=1)] | None = None
-    datetime: dt | None = None
-    from_airport_id: Annotated[int, conint(ge=1)] | None = None
-    to_airport_id: Annotated[int, conint(ge=1)] | None = None
+    min_datetime: dt | None = None
+    max_datetime: dt | None = None
+    from_airport: Annotated[str, constr(max_length=80)] | None = None
+    to_airport: Annotated[str, constr(max_length=80)] | None = None
 
 
 class FlightCreate(FlightBase):
