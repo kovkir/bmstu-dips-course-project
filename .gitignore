@@ -9,3 +9,5 @@ pg_data_flight/
 pg_data_ticket/
 pg_data_bonus/
 pg_data_auth/
+
+node_modules/
