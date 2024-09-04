@@ -14,6 +14,9 @@ class FlightFilter(BaseModel):
     maxPrice: Annotated[int, conint(ge=1)] | None = None
     minDatetime: dt | None = None
     maxDatetime: dt | None = None
+
+
+class FlightFilterGateway(FlightFilter):
     fromAirport: Annotated[str, constr(max_length=80)] | None = None
     toAirport: Annotated[str, constr(max_length=80)] | None = None
 

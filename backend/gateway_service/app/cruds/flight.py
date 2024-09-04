@@ -1,7 +1,7 @@
 import requests
 from cruds.base import BaseCRUD
 from cruds.interfaces.flight import IFlightCRUD
-from enums.sort import SortFlightsShift
+from enums.sort import SortFlights
 from requests import Response
 from schemas.flight import FlightFilter
 from utils.curcuit_breaker import CircuitBreaker
@@ -19,7 +19,7 @@ class FlightCRUD(IFlightCRUD, BaseCRUD):
     async def get_all_flights(
         self,
         flight_filter: FlightFilter,
-        sort: SortFlightsShift = SortFlightsShift.IdAsc,
+        sort: SortFlights = SortFlights.IdAsc,
         page: int = 1,
         size: int = 100,
     ) -> dict:
@@ -27,10 +27,6 @@ class FlightCRUD(IFlightCRUD, BaseCRUD):
 
         if flight_filter.flightNumber:
             url += f"&flight_number={flight_filter.flightNumber}"
-        if flight_filter.fromAirport:
-            url += f"&from_airport={flight_filter.fromAirport}"
-        if flight_filter.toAirport:
-            url += f"&to_airport={flight_filter.toAirport}"
         if flight_filter.minDatetime:
             url += f"&min_datetime={flight_filter.minDatetime}"
         if flight_filter.maxDatetime:

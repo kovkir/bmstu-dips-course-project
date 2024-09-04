@@ -1,9 +1,7 @@
 from cruds.interfaces.flight import IFlightCRUD
 from enums.sort import SortFlights
-from models.airport import AirportModel
 from models.flight import FlightModel
 from schemas.flight import FlightFilter
-from sqlalchemy import or_
 from sqlalchemy.orm import Query
 
 
@@ -71,30 +69,6 @@ class FlightCRUD(IFlightCRUD):
             models = models.filter(
                 FlightModel.datetime <= flight_filter.max_datetime,
             )
-        if flight_filter.from_airport:
-            models = models.join(
-                AirportModel,
-                FlightModel.from_airport_id == AirportModel.id,
-            ).filter(
-                or_(
-                    AirportModel.city.in_(flight_filter.from_airport.split()),
-                    AirportModel.name.in_(flight_filter.from_airport.split()),
-                    AirportModel.city.like(f"%{flight_filter.from_airport}%"),
-                    AirportModel.name.like(f"%{flight_filter.from_airport}%"),
-                ),
-            )
-        if flight_filter.to_airport:
-            models = models.join(
-                AirportModel,
-                FlightModel.to_airport_id == AirportModel.id,
-            ).filter(
-                or_(
-                    AirportModel.city.in_(flight_filter.to_airport.split()),
-                    AirportModel.name.in_(flight_filter.to_airport.split()),
-                    AirportModel.city.like(f"%{flight_filter.to_airport}%"),
-                    AirportModel.name.like(f"%{flight_filter.to_airport}%"),
-                ),
-            )
 
         return models
 
@@ -114,40 +88,4 @@ class FlightCRUD(IFlightCRUD):
             SortFlights.PriceDesc: FlightModel.price.desc(),
         }
 
-        if sort == SortFlights.FromAirportmAsc:
-            models = models.join(
-                AirportModel,
-                FlightModel.from_airport_id == AirportModel.id,
-            ).order_by(
-                AirportModel.city,
-                AirportModel.name,
-            )
-        elif sort == SortFlights.FromAirportDesc:
-            models = models.join(
-                AirportModel,
-                FlightModel.from_airport_id == AirportModel.id,
-            ).order_by(
-                AirportModel.city.desc(),
-                AirportModel.name.desc(),
-            )
-
-        elif sort == SortFlights.ToAirportmAsc:
-            models = models.join(
-                AirportModel,
-                FlightModel.to_airport_id == AirportModel.id,
-            ).order_by(
-                AirportModel.city,
-                AirportModel.name,
-            )
-        elif sort == SortFlights.ToAirportDesc:
-            models = models.join(
-                AirportModel,
-                FlightModel.to_airport_id == AirportModel.id,
-            ).order_by(
-                AirportModel.city.desc(),
-                AirportModel.name.desc(),
-            )
-        else:
-            models = models.order_by(sort_args[sort])
-
-        return models
+        return models.order_by(sort_args[sort])

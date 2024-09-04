@@ -4,7 +4,7 @@ import requests
 from cruds.interfaces.bonus import IBonusCRUD
 from cruds.interfaces.flight import IFlightCRUD
 from cruds.interfaces.ticket import ITicketCRUD
-from enums.sort import SortFlightsShift
+from enums.sort import SortFlights
 from enums.status import PrivilegeHistoryStatus, PrivilegeStatus, TicketStatus
 from exceptions.http_exceptions import (
     NotFoundException,
@@ -20,7 +20,12 @@ from schemas.bonus import (
     PrivilegeShortInfo,
     PrivilegeUpdate,
 )
-from schemas.flight import FlightFilter, FlightResponse, PaginationResponse
+from schemas.flight import (
+    FlightFilter,
+    FlightFilterGateway,
+    FlightResponse,
+    PaginationResponse,
+)
 from schemas.ticket import (
     TicketCreate,
     TicketPurchaseRequest,
@@ -53,16 +58,32 @@ class GatewayService:
 
     async def get_list_of_flights(
         self,
-        flight_filter: FlightFilter,
-        sort: SortFlightsShift,
+        flight_filter: FlightFilterGateway,
+        sort: SortFlights,
         page: int,
         size: int,
     ) -> PaginationResponse:
+        if sort not in [
+            SortFlights.FromAirportmAsc,
+            SortFlights.FromAirportDesc,
+            SortFlights.ToAirportmAsc,
+            SortFlights.ToAirportDesc,
+        ]:
+            sort_flights = sort
+        else:
+            sort_flights = SortFlights.IdAsc
+
         flight_list = await self._flightCRUD.get_all_flights(
-            flight_filter=flight_filter,
-            sort=sort,
-            page=page,
-            size=size,
+            flight_filter=FlightFilter(
+                flightNumber=flight_filter.flightNumber,
+                minDatetime=flight_filter.minDatetime,
+                maxDatetime=flight_filter.maxDatetime,
+                minPrice=flight_filter.minPrice,
+                maxPrice=flight_filter.maxPrice,
+            ),
+            sort=sort_flights,
+            page=1,
+            size=100000,
         )
 
         flights = []
@@ -74,21 +95,55 @@ class GatewayService:
                 flight_dict.get("to_airport_id"),
             )
 
-            flights.append(
-                FlightResponse(
-                    flightNumber=flight_dict["flight_number"],
-                    fromAirport=from_airport,
-                    toAirport=to_airport,
-                    date=flight_dict["datetime"],
-                    price=flight_dict["price"],
-                ),
+            if (
+                not flight_filter.fromAirport
+                or flight_filter.fromAirport in from_airport
+            ) and (
+                not flight_filter.toAirport
+                or flight_filter.toAirport in to_airport
+            ):
+                flights.append(
+                    FlightResponse(
+                        flightNumber=flight_dict["flight_number"],
+                        fromAirport=from_airport,
+                        toAirport=to_airport,
+                        date=flight_dict["datetime"],
+                        price=flight_dict["price"],
+                    ),
+                )
+
+        if sort == SortFlights.FromAirportmAsc:
+            flights = sorted(
+                flights,
+                key=lambda flight: flight.fromAirport,
             )
+        elif sort == SortFlights.FromAirportDesc:
+            flights = sorted(
+                flights,
+                key=lambda flight: flight.fromAirport,
+                reverse=True,
+            )
+        elif sort == SortFlights.ToAirportmAsc:
+            flights = sorted(
+                flights,
+                key=lambda flight: flight.toAirport,
+            )
+        elif sort == SortFlights.ToAirportDesc:
+            flights = sorted(
+                flights,
+                key=lambda flight: flight.toAirport,
+                reverse=True,
+            )
+
+        total_elements = len(flights)
+        offset = (page - 1) * size
+        limit = offset + size
 
         return PaginationResponse(
             page=page,
             pageSize=size,
-            totalElements=len(flights),
-            items=flights,
+            totalElements=total_elements,
+            items=flights[offset:limit],
         )
 
     async def get_info_on_all_user_tickets(

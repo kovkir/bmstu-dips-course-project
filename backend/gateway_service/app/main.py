@@ -5,6 +5,7 @@ from exceptions.handlers import (
 )
 from fastapi import FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 from fastapi.requests import Request
 from fastapi.responses import JSONResponse
@@ -42,6 +43,15 @@ app = FastAPI(
     title="Flight Booking System",
     version="v1",
 )
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_credentials=True,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.include_router(api_router, prefix="/api/v1")
 app.openapi = custom_openapi
 

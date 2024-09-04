@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class SortFlightsShift(Enum):
+class SortFlights(Enum):
     IdAsc = "id_asc"
     IdDesc = "id_desc"
 

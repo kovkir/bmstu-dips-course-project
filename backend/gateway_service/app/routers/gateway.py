@@ -10,12 +10,12 @@ from cruds.interfaces.ticket import ITicketCRUD
 from cruds.ticket import TicketCRUD
 from enums.auth import RoleEnum
 from enums.responses import RespEnum
-from enums.sort import SortFlightsShift
+from enums.sort import SortFlights
 from fastapi import APIRouter, Depends, Header, Query, status
 from fastapi.responses import Response
 from fastapi.security import HTTPAuthorizationCredentials
 from schemas.bonus import PrivilegeInfoResponse
-from schemas.flight import FlightFilter, PaginationResponse
+from schemas.flight import FlightFilterGateway, PaginationResponse
 from schemas.ticket import (
     TicketPurchaseRequest,
     TicketPurchaseResponse,
@@ -65,7 +65,7 @@ async def get_list_of_flights(
     maxDatetime: dt | None = None,
     fromAirport: Annotated[str | None, Query(max_length=80)] = None,
     toAirport: Annotated[str | None, Query(max_length=80)] = None,
-    sort: SortFlightsShift = SortFlightsShift.IdAsc,
+    sort: SortFlights = SortFlights.IdAsc,
     page: Annotated[int, Query(ge=1)] = 1,
     size: Annotated[int, Query(ge=1)] = 100,
 ) -> PaginationResponse:
@@ -74,7 +74,7 @@ async def get_list_of_flights(
         ticketCRUD=ticketCRUD,
         bonusCRUD=bonusCRUD,
     ).get_list_of_flights(
-        flight_filter=FlightFilter(
+        flight_filter=FlightFilterGateway(
             flightNumber=flightNumber,
             minPrice=minPrice,
             maxPrice=maxPrice,

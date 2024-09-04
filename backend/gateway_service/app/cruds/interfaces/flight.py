@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from enums.sort import SortFlightsShift
+from enums.sort import SortFlights
 from schemas.flight import FlightFilter
 
 
@@ -9,7 +9,7 @@ class IFlightCRUD(ABC):
     async def get_all_flights(
         self,
         flight_filter: FlightFilter,
-        sort: SortFlightsShift = SortFlightsShift.IdAsc,
+        sort: SortFlights = SortFlights.IdAsc,
         page: int = 1,
         size: int = 100,
     ) -> list[dict]:
