@@ -8,6 +8,11 @@ interface FormOptionallyButtonProps {
 
 export function FormOptionallyButton({ text, onClick}: FormOptionallyButtonProps) {
 	return (
-		<button className="form-optionally-button" onClick={ onClick }>{ text }</button>
+		<button 
+			className="form-optionally-button" 
+			onClick={ onClick }
+		>
+			{ text }
+		</button>
 	)
 }

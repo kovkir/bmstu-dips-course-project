@@ -2,11 +2,12 @@
 
 @layer components {
 	.navbar-button {
-		@apply mx-4 text-2xl text-white;
+		@apply mx-4 text-2xl text-white min-w-max;
 	}
 	.navbar-button:hover {
 		color: #c9e7ff;
 	}
+
 	.form-button {
 		@apply py-1 px-4 mx-2 w-52 text-white text-xl rounded-3xl border border-white;
 		background-color: #197aca;
@@ -19,5 +20,24 @@
 		@apply py-1 px-4 mx-2 w-52 text-xl rounded-3xl bg-white border hover:border-2;
 		border-color: #197aca;
 		color: #197aca;
+	}
+
+	.authorize-button {
+		@apply py-1 px-2 mx-2 w-60 text-xl rounded-3xl border bg-white;
+		border-color: #197aca;
+		color: #197aca;
+	}
+	.authorize-button:hover {
+		border-width: 2px;
+		background-color: #eff6fd;
+	}
+	.register-button {
+		@apply py-1 px-2 mx-2 w-60 text-white text-xl rounded-3xl border border-white;
+		background-color: #197aca;
+	}
+	.register-button:hover {
+		border-width: 2px;
+		color: #c9e7ff;
+		border-color: #c9e7ff;
 	}
 }

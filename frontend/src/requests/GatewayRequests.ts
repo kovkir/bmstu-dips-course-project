@@ -15,7 +15,7 @@ const baseRequestURL =
 	`http://${config.server.gateway.host}:${config.server.gateway.port}/api/v1`;
 
 
-export default {
+const GatewayRequests = {
 	async getListOfFlights(
 		page: number, 
 		size: number, 
@@ -39,4 +39,6 @@ export default {
 			console.log("Gateway: getListOfFlights network error");
 		}
 	},
-}
+};
+
+export default GatewayRequests;

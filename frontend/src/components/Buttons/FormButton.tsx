@@ -8,6 +8,12 @@ interface FormButtonProps {
 
 export function FormButton({ text, onClick }: FormButtonProps) {
 	return (
-		<button type="submit" className="form-button" onClick={ onClick }>{ text }</button>
+		<button 
+			type="submit" 
+			className="form-button" 
+			onClick={ onClick }
+		>
+			{ text }
+		</button>
 	)
 }
