@@ -48,8 +48,8 @@
 		@apply window;
 		width: 44rem;
 	}
-
-	.change-duty-window-dates {
-		@apply flex flex-row w-full mb-5 justify-center;
+	.authorization-window {
+		@apply window;
+		width: 44rem;
 	}
 }

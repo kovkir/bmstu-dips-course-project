@@ -7,8 +7,8 @@ interface FlightsPageProps {
 
 export function FlightsPage({ openMiniDrawer }: FlightsPageProps) {
 	return (
-			<FlightsTable 
-				openMiniDrawer={ openMiniDrawer }
-			/>
+		<FlightsTable 
+			openMiniDrawer={ openMiniDrawer }
+		/>
 	)
 }

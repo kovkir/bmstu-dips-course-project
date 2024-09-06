@@ -61,7 +61,7 @@ export function DrawerNavBar({ open, handleDrawerOpen, handleDrawerClose }: Draw
 					<div className="authorization-button-container">
 						<AuthorizeButton 
 							text="Войти"
-							link="/"
+							link="/authorization"
 						/>
 					</div>
 

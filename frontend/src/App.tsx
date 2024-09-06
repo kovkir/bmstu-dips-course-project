@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 
 import "./App.css";
+import { AuthorizationPage } from './pages/AuthorizationPage';
 import { FlightsPage } from './pages/FlightsPage';
 import { NetworkErrorPage } from './pages/NetworkErrorPage';
 import { NotFoundPage } from './pages/NotFoundPage';
@@ -28,6 +29,10 @@ function App() {
 					<Route 
 						path="/" 
 						element={ <FlightsPage openMiniDrawer={ open }/> }
+					/>
+					<Route 
+						path="/authorization" 
+						element={ <AuthorizationPage/> }
 					/>
 					<Route 
 						path="/network_error/" 

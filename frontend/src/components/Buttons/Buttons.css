@@ -40,4 +40,13 @@
 		color: #c9e7ff;
 		border-color: #c9e7ff;
 	}
+
+	.authorize-form-button {
+		@apply py-2 px-4 w-full text-white text-xl rounded-lg border border-white;
+		background-color: #197aca;
+	}
+	.authorize-form-button:hover {
+		border-width: 2px;
+		background-color: #156fb9;
+	}
 }
