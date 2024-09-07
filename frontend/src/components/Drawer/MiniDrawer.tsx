@@ -118,7 +118,7 @@ export function MiniDrawer(props: MiniDrawerProps) {
 							icon={ <AccountBoxIcon /> }
 						/>
 					}
-					{ props.user && props.user.role == "ADMIN" &&
+					{ props.user && props.user.role === "ADMIN" &&
 						<DrawerListItem
 							openDrawer={ props.open }
 							text="Пользователи"
@@ -126,7 +126,7 @@ export function MiniDrawer(props: MiniDrawerProps) {
 							icon={ <GroupsIcon /> }
 						/>
 					}
-					{ props.user && props.user.role == "ADMIN" &&
+					{ props.user && props.user.role === "ADMIN" &&
 						<DrawerListItem
 							openDrawer={ props.open }
 							text="Статистика"

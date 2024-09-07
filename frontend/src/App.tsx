@@ -55,13 +55,13 @@ function App() {
 								element={ <div></div> }
 							/>
 					}
-					{ user && user.role == "ADMIN" &&
+					{ user && user.role === "ADMIN" &&
 							<Route 
 								path="/users" 
 								element={ <div></div> }
 							/>
 					}
-					{ user && user.role == "ADMIN" &&
+					{ user && user.role === "ADMIN" &&
 							<Route 
 								path="/statistics" 
 								element={ <div></div> }
