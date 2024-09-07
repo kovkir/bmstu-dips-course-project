@@ -64,7 +64,7 @@ services:
       - POSTGRES_DB=auth_db
     volumes:
       - ./pg_data_auth:/var/lib/postgresql/data
-      # - ./auth_service/sql/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+      - ./auth_service/sql/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
     networks:
       - default
     healthcheck:
