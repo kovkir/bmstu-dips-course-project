@@ -56,14 +56,12 @@ export default class UserService {
     return $apiUser.get<IUser[]>('/user/');
   }
 
-  static async getMe(): Promise<IUser | undefined> {
+  static async getMe(): Promise<IUser | null> {
     try {
       const response = await $apiUser.get<IUser>('/user/me/');
-      const user = response.data;
-
-      return user;
-    } catch (e) {
-      console.log(e);
+      return response.data;
+    } catch {
+      return null;
     }
   }
 }

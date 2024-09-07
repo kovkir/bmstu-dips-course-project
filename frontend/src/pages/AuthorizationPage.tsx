@@ -1,14 +1,15 @@
 import { Authorization } from "../components/Auth/Authorization"
+import { IUser } from "../interfaces/User/IUser"
 
 
 interface AuthorizationPageProps {
-	changeIsAuth: (value: boolean) => void
+	changeUser: (user: IUser | null) => void
 }
 
-export function AuthorizationPage({ changeIsAuth }: AuthorizationPageProps) {
+export function AuthorizationPage({ changeUser }: AuthorizationPageProps) {
 	return (
 		<Authorization
-			changeIsAuth={ changeIsAuth }
+			changeUser={ changeUser }
 		/>
 	)
 }

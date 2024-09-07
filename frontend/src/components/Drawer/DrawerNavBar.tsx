@@ -10,6 +10,7 @@ import { drawerWidth } from './MiniDrawer';
 import { NavBarButton } from "../Buttons/NavBarButton";
 import { AuthorizeButton } from '../Buttons/AuthorizeButton';
 import { RegisterButtom } from '../Buttons/RegisterButtom';
+import { IUser } from '../../interfaces/User/IUser';
 
 
 interface AppBarProps extends MuiAppBarProps {
@@ -37,10 +38,10 @@ const AppBar = styled(MuiAppBar, {
 
 interface DrawerNavBarProps {
 	open: boolean
-	isAuth: boolean
+	user: IUser | null
 	handleDrawerOpen: () => void
 	handleDrawerClose: () => void
-	changeIsAuth: (value: boolean) => void
+	changeUser: (user: IUser | null) => void
 }
 
 export function DrawerNavBar(props: DrawerNavBarProps) {
@@ -63,14 +64,14 @@ export function DrawerNavBar(props: DrawerNavBarProps) {
 
 				<div className="authorization-block">
 					<div className="authorization-button-container">
-						{ props.isAuth
+						{ props.user
 							? 
 								<AuthorizeButton 
 									text="Выйти"
 									link="/"
 									onClick={ () => {
 										AuthService.logout();
-										props.changeIsAuth(false);
+										props.changeUser(null);
 									}}
 								/>
 							:
@@ -81,11 +82,11 @@ export function DrawerNavBar(props: DrawerNavBarProps) {
 						}
 					</div>
 					
-					{ !props.isAuth &&
+					{ !props.user &&
 						<div className="authorization-button-container">
 							<RegisterButtom 
 								text="Зарегистрироваться"
-								link="/"
+								link="/registration"
 							/>
 						</div>
 					}

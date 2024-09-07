@@ -3,17 +3,19 @@ import { useNavigate } from "react-router-dom";
 
 import "../ModalWindows/ModalWindows.css";
 import AuthService from '../../services/AuthService';
+import UserService from '../../services/UserService';
 import { TextHeader } from "../Texts/TextHeader";
 import { InputRow } from "../Inputs/InputRow";
 import { useAuthorizationForm } from "../../hooks/useForms/useAuthorizationForm";
 import { AuthorizeFormButton } from '../Buttons/AuthorizeFormButton';
+import { IUser } from '../../interfaces/User/IUser';
 
 
-interface AuthorizationPageProps {
-	changeIsAuth: (value: boolean) => void
+interface AuthorizationProps {
+	changeUser: (user: IUser | null) => void
 }
 
-export function Authorization({ changeIsAuth }: AuthorizationPageProps) {
+export function Authorization({ changeUser }: AuthorizationProps) {
 	const submitHandler = (event: React.FormEvent) => {
 		event.preventDefault();
 	};
@@ -30,7 +32,7 @@ export function Authorization({ changeIsAuth }: AuthorizationPageProps) {
       if (response) {
         setErrorMsg(response);
       } else {
-				changeIsAuth(true);
+				changeUser(await UserService.getMe());
         navigate("/");
       }
     }

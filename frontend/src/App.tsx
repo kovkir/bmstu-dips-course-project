@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 
 import "./App.css";
 import { AuthorizationPage } from './pages/AuthorizationPage';
+import { RegistrationPage } from './pages/RegistrationPage';
 import { FlightsPage } from './pages/FlightsPage';
 import { NetworkErrorPage } from './pages/NetworkErrorPage';
 import { NotFoundPage } from './pages/NotFoundPage';
@@ -13,10 +14,10 @@ function App() {
 	const { 
 		theme,
 		open,
-		isAuth,
+		user,
 		handleDrawerOpen,
 		handleDrawerClose,
-		changeIsAuth,
+		changeUser,
 	} = useMiniDrawer();
 
 	return (
@@ -24,10 +25,10 @@ function App() {
 			<MiniDrawer
 				theme={ theme }
 				open={ open }
-				isAuth={ isAuth }
+				user={ user }
 				handleDrawerOpen={ handleDrawerOpen }
 				handleDrawerClose={ handleDrawerClose }
-				changeIsAuth={ changeIsAuth }
+				changeUser={ changeUser }
 			>
 				<Routes>
 					<Route 
@@ -36,8 +37,36 @@ function App() {
 					/>
 					<Route 
 						path="/authorization" 
-						element={ <AuthorizationPage changeIsAuth={ changeIsAuth }/> }
+						element={ <AuthorizationPage changeUser={ changeUser }/> }
 					/>
+					<Route 
+						path="/registration" 
+						element={ <RegistrationPage changeUser={ changeUser }/> }
+					/>
+					{ user &&
+							<Route 
+								path="/tickets" 
+								element={ <div></div> }
+							/>
+					}
+					{ user &&
+							<Route 
+								path="/account" 
+								element={ <div></div> }
+							/>
+					}
+					{ user && user.role == "ADMIN" &&
+							<Route 
+								path="/users" 
+								element={ <div></div> }
+							/>
+					}
+					{ user && user.role == "ADMIN" &&
+							<Route 
+								path="/statistics" 
+								element={ <div></div> }
+							/>
+					}
 					<Route 
 						path="/network_error/" 
 						element={ <NetworkErrorPage openMiniDrawer={ open }/> }

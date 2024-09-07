@@ -12,6 +12,7 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 
 import { DrawerNavBar } from './DrawerNavBar';
 import { DrawerListItem } from './DrawerListItem';
+import { IUser } from '../../interfaces/User/IUser';
 import { useDropdownList } from '../../hooks/useDrawers/useDropdownList';
 
 
@@ -64,13 +65,14 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 	}),
 );
 
+
 interface MiniDrawerProps {
 	theme: Theme
 	open: boolean
-	isAuth: boolean
+	user: IUser | null
 	handleDrawerOpen: () => void
 	handleDrawerClose: () => void
-	changeIsAuth: (value: boolean) => void
+	changeUser: (user: IUser | null) => void
 	children?: React.ReactNode
 }
 
@@ -81,13 +83,13 @@ export function MiniDrawer(props: MiniDrawerProps) {
 		<Box sx={{ display: 'flex'}}>
 			<DrawerNavBar
 				open={ props.open }
-				isAuth={ props.isAuth }
+				user={ props.user }
 				handleDrawerOpen={ props.handleDrawerOpen }
 				handleDrawerClose={ () => {
 					dropdownList.handleClose();
 					props.handleDrawerClose();
 				}}
-				changeIsAuth={ props.changeIsAuth }
+				changeUser={ props.changeUser }
 			/>
 
 			<Drawer variant="permanent" open={ props.open }>
@@ -100,30 +102,38 @@ export function MiniDrawer(props: MiniDrawerProps) {
 						link="/"
 						icon={ <FlightIcon /> }
 					/>
-					<DrawerListItem
-						openDrawer={ props.open }
-						text="Билеты"
-						link="/"
-						icon={ <AirplaneTicketIcon /> }
-					/>
-					<DrawerListItem
-						openDrawer={ props.open }
-						text="Аккаунт"
-						link="/"
-						icon={ <AccountBoxIcon /> }
-					/>
-					<DrawerListItem
-						openDrawer={ props.open }
-						text="Пользователи"
-						link="/"
-						icon={ <GroupsIcon /> }
-					/>
-					<DrawerListItem
-						openDrawer={ props.open }
-						text="Статистика"
-						link="/"
-						icon={ <BarChartIcon /> }
-					/>
+					{ props.user &&
+						<DrawerListItem
+							openDrawer={ props.open }
+							text="Билеты"
+							link="/tickets"
+							icon={ <AirplaneTicketIcon /> }
+						/>
+					}
+					{ props.user &&
+						<DrawerListItem
+							openDrawer={ props.open }
+							text="Аккаунт"
+							link="/account"
+							icon={ <AccountBoxIcon /> }
+						/>
+					}
+					{ props.user && props.user.role == "ADMIN" &&
+						<DrawerListItem
+							openDrawer={ props.open }
+							text="Пользователи"
+							link="/users"
+							icon={ <GroupsIcon /> }
+						/>
+					}
+					{ props.user && props.user.role == "ADMIN" &&
+						<DrawerListItem
+							openDrawer={ props.open }
+							text="Статистика"
+							link="/statistics"
+							icon={ <BarChartIcon /> }
+						/>
+					}
 				</List>
 				<Divider />
 			</Drawer>

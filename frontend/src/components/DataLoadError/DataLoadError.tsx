@@ -10,7 +10,7 @@ interface DataLoadErrorProps {
 export function DataLoadError({ handleUpdate }: DataLoadErrorProps) {
 	return (
 		<div className={ "container-load-error" }>
-			<ErrorIcon color="#1f2937" />
+			<ErrorIcon color="#4b5563" />
 			<p className="text-load-error">
 				Ошибка загрузки данных
 			</p>

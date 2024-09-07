@@ -46,7 +46,7 @@
 		max-height: 100%;
 	}
 	.row {
-		@apply container py-1 flex mx-auto min-w-full text-gray-800 border-b border-gray-400;
+		@apply container py-1 flex mx-auto min-w-full text-gray-600 border-b border-gray-400;
 		min-width: 60rem;
 	}
 	.row:hover {

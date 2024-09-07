@@ -41,7 +41,7 @@ export function TablePagination(props: TablePaginationProps) {
 				sx={{ 
 					marginX: "auto",
 					fontSize: "1.25rem",
-					color: "#1f2937"
+					color: "#4b5563"
 				}}
 			/>
 		</div>

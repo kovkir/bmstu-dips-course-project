@@ -5,7 +5,7 @@
 		@apply w-full h-full min-w-min min-h-min flex flex-col justify-center items-center;
 	}
 	.text-load-error {
-		@apply text-xl text-gray-800;
+		@apply text-xl text-gray-600;
 	}
 
 	.container-update {

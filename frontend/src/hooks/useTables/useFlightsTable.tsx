@@ -57,6 +57,7 @@ export function useFlightsTable() {
 
 	const handleChangeFilter = (value: IFilterFlight) => {
 		setFilterTable(value);
+		setPage(0);
 	};
 
 	const handleUpdateTable = async () => {
@@ -77,11 +78,6 @@ export function useFlightsTable() {
 		}
 	};
 
-
-	useEffect(() => {
-		setPage(0);
-	}, [filterTable]);
-	
 	useEffect(() => {
 		const queryString = qs.stringify({
 			flightNumber: filterTable.flightNumber,

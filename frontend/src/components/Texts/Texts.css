@@ -12,7 +12,7 @@
 	}
 
 	.text-error-page-container {
-		@apply absolute top-1/2 -translate-y-1/2 flex flex-col items-center justify-center right-0 mx-auto text-gray-800;
+		@apply absolute top-1/2 -translate-y-1/2 flex flex-col items-center justify-center right-0 mx-auto text-gray-600;
 		transition-property: left;
 		transition-duration: 0.2s;
 	}
