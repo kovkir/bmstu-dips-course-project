@@ -43,7 +43,6 @@ app = FastAPI(
     title="Flight Booking System",
     version="v1",
 )
-
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
@@ -51,7 +50,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 app.include_router(api_router, prefix="/api/v1")
 app.openapi = custom_openapi
 

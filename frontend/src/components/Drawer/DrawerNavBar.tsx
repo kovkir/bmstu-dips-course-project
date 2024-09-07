@@ -5,6 +5,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 
 import "./Drawer.css";
+import AuthService from '../../services/AuthService';
 import { drawerWidth } from './MiniDrawer';
 import { NavBarButton } from "../Buttons/NavBarButton";
 import { AuthorizeButton } from '../Buttons/AuthorizeButton';
@@ -33,20 +34,23 @@ const AppBar = styled(MuiAppBar, {
 	}),
 }));
 
+
 interface DrawerNavBarProps {
 	open: boolean
+	isAuth: boolean
 	handleDrawerOpen: () => void
 	handleDrawerClose: () => void
+	changeIsAuth: (value: boolean) => void
 }
 
-export function DrawerNavBar({ open, handleDrawerOpen, handleDrawerClose }: DrawerNavBarProps) {
+export function DrawerNavBar(props: DrawerNavBarProps) {
 	return (
 		<AppBar position="fixed" open={ false }>
 			<Toolbar>
 				<IconButton
 					color="inherit"
 					aria-label="open drawer"
-					onClick={ open ? handleDrawerClose : handleDrawerOpen }
+					onClick={ props.open ? props.handleDrawerClose : props.handleDrawerOpen }
 					edge="start"
 				>
 					<MenuIcon />
@@ -59,18 +63,32 @@ export function DrawerNavBar({ open, handleDrawerOpen, handleDrawerClose }: Draw
 
 				<div className="authorization-block">
 					<div className="authorization-button-container">
-						<AuthorizeButton 
-							text="Войти"
-							link="/authorization"
-						/>
+						{ props.isAuth
+							? 
+								<AuthorizeButton 
+									text="Выйти"
+									link="/"
+									onClick={ () => {
+										AuthService.logout();
+										props.changeIsAuth(false);
+									}}
+								/>
+							:
+								<AuthorizeButton 
+									text="Авторизоваться"
+									link="/authorization"
+								/>
+						}
 					</div>
-
-					<div className="authorization-button-container">
-						<RegisterButtom 
-							text="Зарегистрироваться"
-							link="/"
-						/>
-					</div>
+					
+					{ !props.isAuth &&
+						<div className="authorization-button-container">
+							<RegisterButtom 
+								text="Зарегистрироваться"
+								link="/"
+							/>
+						</div>
+					}
 				</div>
 			</Toolbar>
 		</AppBar>

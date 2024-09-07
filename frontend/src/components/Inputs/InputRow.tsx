@@ -5,6 +5,7 @@ interface InputRowProps {
 	label: string
 	value: string
 	setValue: (value: string) => void
+	type?: string
 	isInvalidRow?: boolean
 	disabled?: boolean
 	helperText?: string
@@ -27,6 +28,7 @@ export function InputRow(props: InputRowProps) {
 			onChange={ changeHandler }
 			fullWidth={ true }
 			label={ props.label }
+			type={ props.type }
 			error={ props.isInvalidRow }
 			disabled={ props.disabled }
 			helperText={ props.isInvalidRow ? props.helperText : "" }

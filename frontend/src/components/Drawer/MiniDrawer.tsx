@@ -67,8 +67,10 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 interface MiniDrawerProps {
 	theme: Theme
 	open: boolean
+	isAuth: boolean
 	handleDrawerOpen: () => void
 	handleDrawerClose: () => void
+	changeIsAuth: (value: boolean) => void
 	children?: React.ReactNode
 }
 
@@ -79,11 +81,13 @@ export function MiniDrawer(props: MiniDrawerProps) {
 		<Box sx={{ display: 'flex'}}>
 			<DrawerNavBar
 				open={ props.open }
+				isAuth={ props.isAuth }
 				handleDrawerOpen={ props.handleDrawerOpen }
 				handleDrawerClose={ () => {
 					dropdownList.handleClose();
 					props.handleDrawerClose();
 				}}
+				changeIsAuth={ props.changeIsAuth }
 			/>
 
 			<Drawer variant="permanent" open={ props.open }>

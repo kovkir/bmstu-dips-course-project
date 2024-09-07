@@ -2,13 +2,18 @@ import Alert from '@mui/material/Alert';
 import { useNavigate } from "react-router-dom";
 
 import "../ModalWindows/ModalWindows.css";
+import AuthService from '../../services/AuthService';
 import { TextHeader } from "../Texts/TextHeader";
 import { InputRow } from "../Inputs/InputRow";
 import { useAuthorizationForm } from "../../hooks/useForms/useAuthorizationForm";
 import { AuthorizeFormButton } from '../Buttons/AuthorizeFormButton';
 
 
-export function Authorization() {
+interface AuthorizationPageProps {
+	changeIsAuth: (value: boolean) => void
+}
+
+export function Authorization({ changeIsAuth }: AuthorizationPageProps) {
 	const submitHandler = (event: React.FormEvent) => {
 		event.preventDefault();
 	};
@@ -21,13 +26,13 @@ export function Authorization() {
 
 	const auth = async () => {
     if (fieldsCheck()) {
-      // const response = await AuthService.login(login, password);
-
-      // if (response) {
-      //   setErrorMsg(response);
-      // } else {
-      //   navigate("/");
-      // }
+      const response = await AuthService.login(login, password);
+      if (response) {
+        setErrorMsg(response);
+      } else {
+				changeIsAuth(true);
+        navigate("/");
+      }
     }
   };
 
@@ -71,6 +76,7 @@ export function Authorization() {
 						label="Пароль*"
 						value={ password }
 						setValue={ setPassword }
+						type="password"
 						isInvalidRow={ invalidPassword }
 						helperText="Обязательное поле"
 						keyDownHandler={ () => setInvalidPassword(false) }

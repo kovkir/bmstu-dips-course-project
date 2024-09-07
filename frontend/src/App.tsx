@@ -13,8 +13,10 @@ function App() {
 	const { 
 		theme,
 		open,
+		isAuth,
 		handleDrawerOpen,
-		handleDrawerClose
+		handleDrawerClose,
+		changeIsAuth,
 	} = useMiniDrawer();
 
 	return (
@@ -22,8 +24,10 @@ function App() {
 			<MiniDrawer
 				theme={ theme }
 				open={ open }
+				isAuth={ isAuth }
 				handleDrawerOpen={ handleDrawerOpen }
 				handleDrawerClose={ handleDrawerClose }
+				changeIsAuth={ changeIsAuth }
 			>
 				<Routes>
 					<Route 
@@ -32,7 +36,7 @@ function App() {
 					/>
 					<Route 
 						path="/authorization" 
-						element={ <AuthorizationPage/> }
+						element={ <AuthorizationPage changeIsAuth={ changeIsAuth }/> }
 					/>
 					<Route 
 						path="/network_error/" 

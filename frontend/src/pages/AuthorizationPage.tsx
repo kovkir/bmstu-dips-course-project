@@ -1,8 +1,14 @@
 import { Authorization } from "../components/Auth/Authorization"
 
 
-export function AuthorizationPage() {
+interface AuthorizationPageProps {
+	changeIsAuth: (value: boolean) => void
+}
+
+export function AuthorizationPage({ changeIsAuth }: AuthorizationPageProps) {
 	return (
-		<Authorization/>
+		<Authorization
+			changeIsAuth={ changeIsAuth }
+		/>
 	)
 }
