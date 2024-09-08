@@ -102,24 +102,48 @@ class TicketCRUD(ITicketCRUD):
     ) -> Query:
         match sort_field:
             case SortTicket.UsernameAsc:
-                tickets = tickets.order_by(TicketModel.username)
+                tickets = tickets.order_by(
+                    TicketModel.username,
+                    TicketModel.id.desc(),
+                )
             case SortTicket.UsernameDesc:
-                tickets = tickets.order_by(TicketModel.username.desc())
+                tickets = tickets.order_by(
+                    TicketModel.username.desc(),
+                    TicketModel.id.desc(),
+                )
 
             case SortTicket.FlightNumberAsc:
-                tickets = tickets.order_by(TicketModel.flight_number)
+                tickets = tickets.order_by(
+                    TicketModel.flight_number,
+                    TicketModel.id.desc(),
+                )
             case SortTicket.FlightNumberDesc:
-                tickets = tickets.order_by(TicketModel.flight_number.desc())
+                tickets = tickets.order_by(
+                    TicketModel.flight_number.desc(),
+                    TicketModel.id.desc(),
+                )
 
             case SortTicket.PriceAsc:
-                tickets = tickets.order_by(TicketModel.price)
+                tickets = tickets.order_by(
+                    TicketModel.price,
+                    TicketModel.id.desc(),
+                )
             case SortTicket.PriceDesc:
-                tickets = tickets.order_by(TicketModel.price.desc())
+                tickets = tickets.order_by(
+                    TicketModel.price.desc(),
+                    TicketModel.id.desc(),
+                )
 
             case SortTicket.StatusAsc:
-                tickets = tickets.order_by(TicketModel.status)
+                tickets = tickets.order_by(
+                    TicketModel.status,
+                    TicketModel.id.desc(),
+                )
             case SortTicket.StatusDesc:
-                tickets = tickets.order_by(TicketModel.status.desc())
+                tickets = tickets.order_by(
+                    TicketModel.status.desc(),
+                    TicketModel.id.desc(),
+                )
 
             case SortTicket.IdDesc:
                 tickets = tickets.order_by(TicketModel.id.desc())
