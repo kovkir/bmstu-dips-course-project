@@ -9,7 +9,7 @@ import { FormButton } from "../Buttons/FormButton";
 import { FormOptionallyButton } from "../Buttons/FormOptionallyButton";
 import { TextHeader } from "../Texts/TextHeader";
 import { TextField } from "../Texts/TextField";
-import { InputRow } from '../Inputs/InputRow';
+import { TextRow } from '../Texts/TextRow';
 import { ConfirmationWindow } from "./ConfirmationWindow";
 import { ITicketResponse } from '../../interfaces/Ticket/ITicketResponse';
 import { IPrivilege } from '../../interfaces/Bonus/IPrivilege';
@@ -105,53 +105,48 @@ export function BuyTicketWindow(props: BuyTicketWindowProps) {
 					children={
 						<>
 							<div className="mb-5">
-								<InputRow
+								<TextRow
 									label="Номер рейса"
-									value={ props.flight.flightNumber }
-									setValue={ () => {} }
+									text={ props.flight.flightNumber }
 								/>
 							</div>
 							<div className="mb-5">
-								<InputRow
+								<TextRow
 									label="Аэропорт отправления"
-									value={ props.flight.fromAirport }
-									setValue={ () => {} }
+									text={ props.flight.fromAirport }
 								/>
 							</div>
 							<div className="mb-5">
-								<InputRow
+								<TextRow
 									label="Аэропорт прибытия"
-									value={ props.flight.toAirport }
-									setValue={ () => {} }
+									text={ props.flight.toAirport }
 								/>
 							</div>
 							<div className="mb-5">
-								<InputRow
+								<TextRow
 									label="Дата и время отправления"
-									value={ props.flight.date }
-									setValue={ () => {} }
+									text={ props.flight.date }
 								/>
 							</div>
-							<InputRow
+							<TextRow
 								label="Цена"
-								value={ `${props.flight.price}` }
-								setValue={ () => {} }
+								text={ `${props.flight.price}` }
 							/>
 						</>
 					}
 					onClose={ confirmBuyWindow.handleCloseWindow }
 					onConfirm={ async () => {
-							const ticket = await GatewayService.buyTicket(
+							const response = await GatewayService.buyTicket(
 								{ 
 									flightNumber: props.flight.flightNumber,
 									price: props.flight.price,
 									paidFromBalance,
 								}
 							);
-							if (ticket) {
+							if (response) {
 								confirmBuyWindow.handleCloseWindow();
 								props.onClose();
-								props.handleOpenPurchaseInfoWindow(ticket);
+								props.handleOpenPurchaseInfoWindow(response.data);
 								await props.handleUpdatePrivilege();
 							} else {
 								navigate("/network_error");

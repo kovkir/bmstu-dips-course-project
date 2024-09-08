@@ -24,7 +24,7 @@ export function PurchaseInfoWindow({ ticket, onClose }: PurchaseInfoWindowProps)
 					sx={{ fontSize: 18 }}
 					severity="success"
 				>
-					{`Вы купили билет на рейс номер ${ticket.flightNumber} по нправлению ${ticket.fromAirport} - ${ticket.toAirport}, вылет запланирован на ${ticket.date}. Вам доступно ${ticket.privilege.balance} бонусов. Благодарим за покупку!`}
+					{`Вы купили билет на рейс номер ${ticket.flightNumber} по направлению ${ticket.fromAirport} - ${ticket.toAirport}, вылет запланирован на ${ticket.date}. Вам доступно ${ticket.privilege.balance} бонусов. Благодарим за покупку!`}
 				</Alert>
 
 				<div className="right-buttons">

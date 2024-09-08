@@ -46,6 +46,6 @@
 	}
 	.authorization-window {
 		@apply window;
-		width: 44rem;
+		width: 38rem;
 	}
 }

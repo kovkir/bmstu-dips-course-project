@@ -4,6 +4,7 @@ import "./App.css";
 import { AuthorizationPage } from './pages/AuthorizationPage';
 import { RegistrationPage } from './pages/RegistrationPage';
 import { FlightsPage } from './pages/FlightsPage';
+import { TicketsPage } from './pages/TicketsPage';
 import { NetworkErrorPage } from './pages/NetworkErrorPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { MiniDrawer } from './components/Drawer/MiniDrawer';
@@ -46,7 +47,7 @@ function App() {
 					{ user &&
 							<Route 
 								path="/tickets" 
-								element={ <div></div> }
+								element={ <TicketsPage openMiniDrawer={ open } user={ user }/> }
 							/>
 					}
 					{ user &&
