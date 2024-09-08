@@ -11,7 +11,7 @@ from cruds.ticket import TicketCRUD
 from enums.auth import RoleEnum
 from enums.responses import RespEnum
 from enums.sort import SortFlights
-from fastapi import APIRouter, Depends, Header, Query, status
+from fastapi import APIRouter, Depends, Query, status
 from fastapi.responses import Response
 from fastapi.security import HTTPAuthorizationCredentials
 from schemas.bonus import PrivilegeInfoResponse
@@ -21,9 +21,9 @@ from schemas.ticket import (
     TicketPurchaseResponse,
     TicketResponse,
 )
-from schemas.user import UserInfoResponse
+from schemas.user import UserInfoResponse, UserPayloadDto
 from services.gateway import GatewayService
-from utils.auth_user import RoleChecker, http_bearer
+from utils.auth_user import RoleChecker, get_current_user, http_bearer
 
 
 def get_flight_crud() -> type[IFlightCRUD]:
@@ -103,7 +103,7 @@ async def get_information_on_all_user_tickets(
     flightCRUD: Annotated[IFlightCRUD, Depends(get_flight_crud)],
     ticketCRUD: Annotated[ITicketCRUD, Depends(get_ticket_crud)],
     bonusCRUD: Annotated[IBonusCRUD, Depends(get_bonus_crud)],
-    X_User_Name: Annotated[str, Header(max_length=80)],
+    user: UserPayloadDto = Depends(get_current_user),
     token: HTTPAuthorizationCredentials | None = Depends(http_bearer),
     _: bool = Depends(
         RoleChecker(allowed_roles=[RoleEnum.USER, RoleEnum.MODERATOR]),
@@ -115,7 +115,7 @@ async def get_information_on_all_user_tickets(
         bonusCRUD=bonusCRUD,
         token=token,
     ).get_info_on_all_user_tickets(
-        user_name=X_User_Name,
+        user_name=user.login,
     )
 
 
@@ -132,8 +132,8 @@ async def get_information_on_user_ticket(
     flightCRUD: Annotated[IFlightCRUD, Depends(get_flight_crud)],
     ticketCRUD: Annotated[ITicketCRUD, Depends(get_ticket_crud)],
     bonusCRUD: Annotated[IBonusCRUD, Depends(get_bonus_crud)],
-    X_User_Name: Annotated[str, Header(max_length=80)],
     ticketUid: UUID,
+    user: UserPayloadDto = Depends(get_current_user),
     token: HTTPAuthorizationCredentials | None = Depends(http_bearer),
     _: bool = Depends(
         RoleChecker(allowed_roles=[RoleEnum.USER, RoleEnum.MODERATOR]),
@@ -145,7 +145,7 @@ async def get_information_on_user_ticket(
         bonusCRUD=bonusCRUD,
         token=token,
     ).get_info_on_user_ticket(
-        user_name=X_User_Name,
+        user_name=user.login,
         ticket_uid=ticketUid,
     )
 
@@ -165,8 +165,8 @@ async def buy_ticket(
     flightCRUD: Annotated[IFlightCRUD, Depends(get_flight_crud)],
     ticketCRUD: Annotated[ITicketCRUD, Depends(get_ticket_crud)],
     bonusCRUD: Annotated[IBonusCRUD, Depends(get_bonus_crud)],
-    X_User_Name: Annotated[str, Header(max_length=80)],
     ticket_purchase_request: TicketPurchaseRequest,
+    user: UserPayloadDto = Depends(get_current_user),
     token: HTTPAuthorizationCredentials | None = Depends(http_bearer),
     _: bool = Depends(
         RoleChecker(allowed_roles=[RoleEnum.USER, RoleEnum.MODERATOR]),
@@ -178,7 +178,7 @@ async def buy_ticket(
         bonusCRUD=bonusCRUD,
         token=token,
     ).buy_ticket(
-        user_name=X_User_Name,
+        user_name=user.login,
         ticket_purchase_request=ticket_purchase_request,
     )
 
@@ -198,8 +198,8 @@ async def ticket_refund(
     flightCRUD: Annotated[IFlightCRUD, Depends(get_flight_crud)],
     ticketCRUD: Annotated[ITicketCRUD, Depends(get_ticket_crud)],
     bonusCRUD: Annotated[IBonusCRUD, Depends(get_bonus_crud)],
-    X_User_Name: Annotated[str, Header(max_length=80)],
     ticketUid: UUID,
+    user: UserPayloadDto = Depends(get_current_user),
     token: HTTPAuthorizationCredentials | None = Depends(http_bearer),
     _: bool = Depends(
         RoleChecker(allowed_roles=[RoleEnum.USER, RoleEnum.MODERATOR]),
@@ -211,7 +211,7 @@ async def ticket_refund(
         bonusCRUD=bonusCRUD,
         token=token,
     ).ticket_refund(
-        user_name=X_User_Name,
+        user_name=user.login,
         ticket_uid=ticketUid,
     )
 
@@ -234,7 +234,7 @@ async def get_user_information(
     flightCRUD: Annotated[IFlightCRUD, Depends(get_flight_crud)],
     ticketCRUD: Annotated[ITicketCRUD, Depends(get_ticket_crud)],
     bonusCRUD: Annotated[IBonusCRUD, Depends(get_bonus_crud)],
-    X_User_Name: Annotated[str, Header(max_length=80)],
+    user: UserPayloadDto = Depends(get_current_user),
     token: HTTPAuthorizationCredentials | None = Depends(http_bearer),
     _: bool = Depends(
         RoleChecker(allowed_roles=[RoleEnum.USER, RoleEnum.MODERATOR]),
@@ -246,7 +246,7 @@ async def get_user_information(
         bonusCRUD=bonusCRUD,
         token=token,
     ).get_user_information(
-        user_name=X_User_Name,
+        user_name=user.login,
     )
 
 
@@ -264,7 +264,7 @@ async def get_information_about_bonus_account(
     flightCRUD: Annotated[IFlightCRUD, Depends(get_flight_crud)],
     ticketCRUD: Annotated[ITicketCRUD, Depends(get_ticket_crud)],
     bonusCRUD: Annotated[IBonusCRUD, Depends(get_bonus_crud)],
-    X_User_Name: Annotated[str, Header(max_length=80)],
+    user: UserPayloadDto = Depends(get_current_user),
     token: HTTPAuthorizationCredentials | None = Depends(http_bearer),
     _: bool = Depends(
         RoleChecker(allowed_roles=[RoleEnum.USER, RoleEnum.MODERATOR]),
@@ -276,5 +276,5 @@ async def get_information_about_bonus_account(
         bonusCRUD=bonusCRUD,
         token=token,
     ).get_info_about_bonus_account(
-        user_name=X_User_Name,
+        user_name=user.login,
     )
