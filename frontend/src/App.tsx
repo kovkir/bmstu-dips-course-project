@@ -33,7 +33,7 @@ function App() {
 				<Routes>
 					<Route 
 						path="/" 
-						element={ <FlightsPage openMiniDrawer={ open }/> }
+						element={ <FlightsPage openMiniDrawer={ open } user={ user }/> }
 					/>
 					<Route 
 						path="/authorization" 
@@ -52,12 +52,6 @@ function App() {
 					{ user &&
 							<Route 
 								path="/account" 
-								element={ <div></div> }
-							/>
-					}
-					{ user && user.role === "ADMIN" &&
-							<Route 
-								path="/users" 
 								element={ <div></div> }
 							/>
 					}

@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
-import GroupsIcon from '@mui/icons-material/Groups';
 import FlightIcon from '@mui/icons-material/Flight';
 import AirplaneTicketIcon from '@mui/icons-material/AirplaneTicket';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
@@ -116,14 +115,6 @@ export function MiniDrawer(props: MiniDrawerProps) {
 							text="Аккаунт"
 							link="/account"
 							icon={ <AccountBoxIcon /> }
-						/>
-					}
-					{ props.user && props.user.role === "ADMIN" &&
-						<DrawerListItem
-							openDrawer={ props.open }
-							text="Пользователи"
-							link="/users"
-							icon={ <GroupsIcon /> }
 						/>
 					}
 					{ props.user && props.user.role === "ADMIN" &&

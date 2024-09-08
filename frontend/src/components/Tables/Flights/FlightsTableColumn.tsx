@@ -31,7 +31,7 @@ export function FlightsTableColumn(props: FlightsTableColumnProps) {
 	
 	return (
 		<div 
-			className={`row-item ${props.addClassName}`}
+			className={`title-row-item ${props.addClassName}`}
 			onClick={ handleClicked }
 			onMouseEnter={ handleMouseEnter}
 			onMouseLeave={ handleMouseLeave }

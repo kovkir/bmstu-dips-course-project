@@ -4,17 +4,22 @@ import { FlightsRow } from "./FlightsRow";
 import { TablePagination } from '../TablePagination';
 import { DataLoadError } from "../../DataLoadError/DataLoadError";
 import { FilterFlightsWindow } from "../../ModalWindows/FilterFlightsWindow";
+import { PurchaseInfoWindow } from "../../ModalWindows/PurchaseInfoWindow";
+import { ITicketResponse } from "../../../interfaces/Ticket/ITicketResponse";
+import { IUser } from '../../../interfaces/User/IUser';
+import { usePurchaseInfoWindow } from "../../../hooks/useWindows/usePurchaseInfoWindow";
 import { useFlightsTable } from "../../../hooks/useTables/useFlightsTable";
 import { useFilterFlightsWindow } from "../../../hooks/useWindows/useFilterFlightsWindow";
-import { IFlight } from "../../../interfaces/Flight/IFlight";
 
 
 interface FlightsTableProps {
 	openMiniDrawer: boolean
+	user: IUser | null
 }
 
-export function FlightsTable({ openMiniDrawer }: FlightsTableProps) {
+export function FlightsTable({ openMiniDrawer, user }: FlightsTableProps) {
 	const { 
+		privilege,
 		flights,
 		amountFlights,
 		sortTable, 
@@ -22,6 +27,7 @@ export function FlightsTable({ openMiniDrawer }: FlightsTableProps) {
 		page, 
 		rowsPerPage,
 		error,
+		handleUpdatePrivilege,
 		handleUpdateTable,
 		handleChangePage, 
 		handleChangeRowsPerPage,
@@ -30,7 +36,7 @@ export function FlightsTable({ openMiniDrawer }: FlightsTableProps) {
 	} = useFlightsTable();
 
 	const filterFlightsWindow = useFilterFlightsWindow({ handleChangeFilter });
-
+	const purchaseInfoWindow = usePurchaseInfoWindow();
 
 	return (
 		<>
@@ -50,7 +56,10 @@ export function FlightsTable({ openMiniDrawer }: FlightsTableProps) {
 											<FlightsRow 
 												key={ flight.flightNumber }
 												flight={ flight } 
-												handleOpenPayWindow={ (flights: IFlight) => {} }
+												user={ user }
+												privilege={ privilege }
+												handleOpenPurchaseInfoWindow={ purchaseInfoWindow.handleOpenWindow }
+												handleUpdatePrivilege={ handleUpdatePrivilege }
 												addClassName={index % 2 ? "bg-gray-200": "bg-white"}
 											/>
 										)
@@ -78,6 +87,13 @@ export function FlightsTable({ openMiniDrawer }: FlightsTableProps) {
 					onFilter={ filterFlightsWindow.handleSearch } 
 					onClose={ filterFlightsWindow.handleCloseWindow }
 				/> 
+			}
+
+			{ purchaseInfoWindow.visibility && 
+				<PurchaseInfoWindow 
+					ticket={ purchaseInfoWindow.ticket as ITicketResponse }
+					onClose={ purchaseInfoWindow.handleCloseWindow }
+				/>
 			}
 		</>
 	)

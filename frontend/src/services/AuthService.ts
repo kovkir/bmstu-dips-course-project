@@ -1,33 +1,14 @@
-import axios, { isAxiosError } from "axios";
+import { isAxiosError } from "axios";
 
 import { IAuthResponse } from "../interfaces/Auth/IAuthResponse";
-import { config } from "../config";
+import { ICreateUser } from "../interfaces/User/ICreateUser";
+import { $apiAuth } from "./AxiosInstances";
 
-
-axios.defaults.headers.common['Access-Control-Allow-Headers'] = '*';
-axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
-axios.defaults.headers.common['Access-Control-Allow-Methods'] = '*';
-axios.defaults.headers.common['WWW-Authenticate'] = 'Negotiate';
-
-interface CreateUserDto {
-  login: string;
-  password: string;
-  email: string;
-  phone: string;
-  lastname: string;
-  firstname: string;
-  role?: "USER" | "MODERATOR" | "ADMIN";
-}
-
-const $apiAuth = axios.create({
-  baseURL: 
-		`http://${config.server.auth.host}:${config.server.auth.port}/api/v1/`,
-});
 
 export default class AuthService {
   static async login(login: string, password: string): Promise<string | null>  {
     const response = await $apiAuth.post<IAuthResponse>(
-      "user/login/",
+      "/user/login/",
       {login, password},
     ).catch((error) => {
       var errorMessage: string;
@@ -58,11 +39,11 @@ export default class AuthService {
 
       return null;
     }
-  }
+  };
 
-  static async register({...registerDto}: CreateUserDto): Promise<string | null>  { 
+  static async register({...registerDto}: ICreateUser): Promise<string | null>  { 
     const response = await $apiAuth.post<IAuthResponse>(
-      "user/register/",
+      "/user/register/",
       {...registerDto, role: "USER"},
     ).catch((error) => {
       var errorMessage: string;
@@ -93,14 +74,14 @@ export default class AuthService {
       
       return null;
     }
-  }
+  };
 
   static logout(): undefined {
     localStorage.clear();
     return;
-  }
+  };
 
   static isAuth(): boolean {
     return !!localStorage.getItem(`accessToken`);
-  }
+  };
 }

@@ -34,11 +34,7 @@
 	}
 	.info-window {
 		@apply window;
-		width: 34rem;
-	}
-	.change-window {
-		@apply window;
-		width: 44rem;
+		width: 38rem;
 	}
 	.add-window {
 		@apply window;

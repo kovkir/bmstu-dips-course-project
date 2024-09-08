@@ -3,9 +3,12 @@ import { useNavigate } from "react-router-dom";
 import qs from 'qs';
 
 import GatewayRequests from '../../requests/GatewayRequests';
+import AuthService from '../../services/AuthService';
+import GatewayService from '../../services/GatewayService';
 import { SortFlights } from '../../enums/SortFlights';
 import { IFlight } from '../../interfaces/Flight/IFlight';
 import { IFilterFlight } from '../../interfaces/Flight/IFilterFlight';
+import { IPrivilege } from '../../interfaces/Bonus/IPrivilege';
 
 
 export function useFlightsTable() {
@@ -34,6 +37,7 @@ export function useFlightsTable() {
 	const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageInitValue);
 	const [sortTable, setSortTable] = useState(sortTableInitValue);
 	const [filterTable, setFilterTable] = useState<IFilterFlight>(filterTableInitValue);
+	const [privilege, setPrivilege] = useState<IPrivilege | null>(null);
 	const [error, setError] = useState(false);
 	const navigate = useNavigate();
 
@@ -62,8 +66,12 @@ export function useFlightsTable() {
 
 	const handleUpdateTable = async () => {
 		await fetchFlights();
+		await fetchPrivilege();
 	};
 
+	const handleUpdatePrivilege = async () => {
+		await fetchPrivilege();
+	};
 
 	async function fetchFlights() {
 		const response = await GatewayRequests.getListOfFlights(page, rowsPerPage, sortTable, filterTable);
@@ -76,6 +84,19 @@ export function useFlightsTable() {
 			setFlights([]);
 			setAmountFlights(0);
 		}
+	};
+
+	async function fetchPrivilege() {
+		if (AuthService.isAuth()) {
+			const userInformation = await GatewayService.getUserInformation();
+			if (userInformation) {
+				setError(false);
+				setPrivilege(userInformation.privilege);
+			} else {
+				setError(true);
+				setPrivilege(null);
+			}
+		};
 	};
 
 	useEffect(() => {
@@ -96,7 +117,12 @@ export function useFlightsTable() {
 		fetchFlights();
 	}, [page, rowsPerPage, sortTable, filterTable]);
 
+	useEffect(() => {
+		fetchPrivilege();
+	}, []);
+
 	return { 
+		privilege,
 		flights,
 		amountFlights,
 		sortTable, 
@@ -104,6 +130,7 @@ export function useFlightsTable() {
 		page, 
 		rowsPerPage,
 		error,
+		handleUpdatePrivilege,
 		handleUpdateTable,
 		handleChangePage, 
 		handleChangeRowsPerPage,

@@ -9,7 +9,6 @@ import { config } from "../config";
 axios.defaults.headers.common['Access-Control-Allow-Headers'] = '*';
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 axios.defaults.headers.common['Access-Control-Allow-Methods'] = '*';
-axios.defaults.headers.common['WWW-Authenticate'] = 'Negotiate';
 
 const baseRequestURL = 
 	`http://${config.server.gateway.host}:${config.server.gateway.port}/api/v1`;
