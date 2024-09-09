@@ -27,7 +27,7 @@ export function useMiniDrawer() {
 		if (AuthService.isAuth()) {
 			setUser(await UserService.getMe());
 		}
-	}
+	};
 
 	useEffect(() => {
 		fetchCurrentUser();

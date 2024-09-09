@@ -4,7 +4,7 @@ import "./Boards.css";
 import { ITicket } from "../../interfaces/Ticket/ITicket";
 import { ConfirmationWindow } from "../ModalWindows/ConfirmationWindow";
 import { TextRow } from "../Texts/TextRow";
-import { DeleteItemIcon } from "../Icons/DeleteItemIcon";
+import { RefundIcon } from '../Icons/RefundIcon';
 import { useWindow } from "../../hooks/useWindows/useWindow";
 
 
@@ -27,7 +27,7 @@ export function TicketsItem({ ticket, ticketRefund }: TicketsItemProps) {
 						</div>
 
 						{ ticket.status === "PAID" &&
-							<DeleteItemIcon 
+							<RefundIcon 
 								color="gray"
 								addClassName="px-2 py-2 hover:bg-gray-900/10"
 								onClick={ confirmDeleteWindow.handleOpenWindow }

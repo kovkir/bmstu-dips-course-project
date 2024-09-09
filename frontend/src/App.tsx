@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import "./App.css";
 import { AuthorizationPage } from './pages/AuthorizationPage';
 import { RegistrationPage } from './pages/RegistrationPage';
+import { AccountPage } from './pages/AccountPage';
 import { FlightsPage } from './pages/FlightsPage';
 import { TicketsPage } from './pages/TicketsPage';
 import { NetworkErrorPage } from './pages/NetworkErrorPage';
@@ -51,9 +52,9 @@ function App() {
 							/>
 					}
 					{ user &&
-							<Route 
+							<Route
 								path="/account" 
-								element={ <div></div> }
+								element={ <AccountPage openMiniDrawer={ open } user={ user }/> }
 							/>
 					}
 					{ user && user.role === "ADMIN" &&

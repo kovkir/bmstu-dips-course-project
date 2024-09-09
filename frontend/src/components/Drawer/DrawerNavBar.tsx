@@ -58,7 +58,7 @@ export function DrawerNavBar(props: DrawerNavBarProps) {
 				</IconButton>
 
 				<NavBarButton 
-					text="СПО УС ПОИ"
+					text="Flight Booking System"
 					link="/"
 				/>
 

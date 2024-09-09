@@ -14,6 +14,9 @@ class PrivilegeHistoryCRUD(IPrivilegeHistoryCRUD):
             privilege_histories,
             privilege_history_filter,
         )
+        privilege_histories = privilege_histories.order_by(
+            PrivilegeHistoryModel.id.desc(),
+        )
 
         return privilege_histories.all()
 
