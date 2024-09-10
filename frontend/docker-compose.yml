@@ -1,12 +1,12 @@
 version: '3.1'
 
 services: 
-  dutyshifts-client:
-    image: dutyshifts-client
-    container_name: dutyshifts-client
+  dips-client:
+    image: dips-client
+    container_name: dips-client
     build:
       context: .
       dockerfile: Dockerfile
 
     ports:
-      - "3010:80"
+      - "3000:80"

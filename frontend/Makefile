@@ -8,9 +8,9 @@ info:
 	docker ps -a
 
 delete-client:
-	docker rmi dutyshifts-client
+	docker rmi dips-client
 
 restart-client:
 	docker-compose down; \
-	docker rmi dutyshifts-client; \
+	docker rmi dips-client; \
 	sudo docker-compose up -d

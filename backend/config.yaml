@@ -23,6 +23,12 @@ databases:
     db: auth_db
     host: auth_database
     port: 5432
+  statistics_db:
+    user: postgres
+    password: password
+    db: statistics_db
+    host: statistics_database
+    port: 5432
 
 services:
   bonus:
@@ -48,6 +54,7 @@ services:
     bonus_host:  bonus_service
     flight_host: flight_service
     ticket_host: ticket_service
+    statistics_host: statistics_service
     max_num_of_fails: 2
     timeout: 10
   auth:
@@ -57,3 +64,8 @@ services:
     log_level: "info"
     reload: True
     kid: "1"
+  statistics:
+    host: "0.0.0.0"
+    port: 8090
+    log_level: "info"
+    reload: True

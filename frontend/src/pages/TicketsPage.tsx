@@ -1,4 +1,4 @@
-import { TicketsBoard } from '../components/Bords/TicketsBoard';
+import { TicketsBoard } from '../components/Boards/TicketsBoard';
 import { IUser } from '../interfaces/User/IUser';
 
 

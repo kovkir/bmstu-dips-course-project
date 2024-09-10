@@ -1,7 +1,3 @@
-import datetime
-
-import pytz
-import requests
 import uvicorn
 from exceptions.handlers import (
     http_exception_handler,
@@ -12,11 +8,11 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 from fastapi.requests import Request
-from fastapi.responses import JSONResponse, Response
+from fastapi.responses import JSONResponse
+from models.statistics import StatisticsModel  # noqa: F401
 from routers.api import router as api_router
+from utils.database import create_tables
 from utils.settings import get_settings
-
-settings = get_settings()
 
 
 def custom_openapi() -> dict:
@@ -45,10 +41,15 @@ def custom_openapi() -> dict:
     return app.openapi_schema
 
 
+create_tables()
+
 app = FastAPI(
-    title="Flight Booking System",
+    title="Statistics Service",
     version="v1",
 )
+app.include_router(api_router, prefix="/api/v1")
+app.openapi = custom_openapi
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
@@ -56,38 +57,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-app.include_router(api_router, prefix="/api/v1")
-app.openapi = custom_openapi
-
-
-@app.middleware("http")
-async def logs_handler(request: Request, call_next) -> Response:  # noqa: ANN001
-    response: Response = await call_next(request)
-
-    method = request.method
-    url = request.url
-    status_code = response.status_code
-    current_time = datetime.datetime.now()
-    moscow_timezone = pytz.timezone("Europe/Moscow")
-    moscow_time = current_time.astimezone(moscow_timezone)
-
-    data = f'{{"method": "{method}", "url": "{url}", "status_code": "{status_code}", "time": "{moscow_time}"}}'  # noqa: E501
-    try:
-        requests.post(
-            url=f"http://{settings['services']['gateway']['statistics_host']}:"
-            f"{settings['services']['statistics']['port']}/api/v1/statistics/produce",
-            data=data,
-        )
-    except Exception as err:
-        print(err)
-
-    return response
 
 
 @app.exception_handler(HTTPException)
 async def custom_http_exception_handler(
     request: Request,
-    exc: RequestValidationError,
+    exc: HTTPException,
 ) -> JSONResponse:
     return await http_exception_handler(request, exc)
 
@@ -95,16 +70,17 @@ async def custom_http_exception_handler(
 @app.exception_handler(RequestValidationError)
 async def custom_validation_exception_handler(
     request: Request,
-    exc: RequestValidationError,
+    exc: HTTPException,
 ) -> JSONResponse:
     return await request_validation_exception_handler(request, exc)
 
 
 if __name__ == "__main__":
+    settings = get_settings()
     uvicorn.run(
         "main:app",
-        host=settings["services"]["gateway"]["host"],
-        port=settings["services"]["gateway"]["port"],
-        log_level=settings["services"]["gateway"]["log_level"],
-        reload=settings["services"]["gateway"]["reload"],
+        host=settings["services"]["statistics"]["host"],
+        port=settings["services"]["statistics"]["port"],
+        log_level=settings["services"]["statistics"]["log_level"],
+        reload=settings["services"]["statistics"]["reload"],
     )
