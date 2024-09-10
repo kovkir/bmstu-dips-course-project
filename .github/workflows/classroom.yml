@@ -49,6 +49,7 @@ jobs:
             sudo docker rmi auth_service
             sudo docker rmi statistics_service
             sudo docker rmi consumer_service
+            sudo mkdir auth_service/app/certs
             sudo docker compose up -d
         
       - name: Run frontend
