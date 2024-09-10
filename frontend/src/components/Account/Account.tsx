@@ -24,34 +24,35 @@ export function Account({ user }: AccountProps) {
 
 	return (
 		<>
-			{ !error && privilegeInfo
+			{ !error
 				?	<>
-						<div className="detailed-info-container">
-							<TextHeader
-								text="Информация о пользователе и история покупок билетов"
-							/>
+						{ privilegeInfo &&
+							<div className="detailed-info-container">
+								<TextHeader
+									text="Информация о пользователе и история покупок билетов"
+								/>
 
-							<UserInfo
-								user={ user }
-							/>
+								<UserInfo
+									user={ user }
+								/>
 
-							<div className="my-5">
-								<Alert
-									sx={{ fontSize: 18 }}
-									severity="info"
-								>
-									{`На Вашем счету ${privilegeInfo.balance} бонусов`}
-								</Alert>
+								<div className="my-5">
+									<Alert
+										sx={{ fontSize: 18 }}
+										severity="info"
+									>
+										{`На Вашем счету ${privilegeInfo.balance} бонусов`}
+									</Alert>
+								</div>
+
+								<BalanceHistory 
+									history={ privilegeInfo.history }
+									selectDate={ selectDate }
+									selectTime={ selectTime }
+								/>
 							</div>
-
-							<BalanceHistory 
-								history={ privilegeInfo.history }
-								selectDate={ selectDate }
-								selectTime={ selectTime }
-							/>
-						</div>
+						}
 					</>
-
 				: <DataLoadError 
 						handleUpdate={ handleUpdatePrivilegeInfo }
 					/>
