@@ -4,6 +4,7 @@ __pycache__/
 .ruff_cache/
 .vscode/
 .DS_Store
+keys/
 
 pg_data_flight/
 pg_data_ticket/
