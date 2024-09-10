@@ -1,5 +1,3 @@
-import BarChart from "@mui/icons-material/BarChart";
-
 import "../Tables.css";
 import { StatisticsTitleRow } from "./StatisticsTitleRow";
 import { StatisticsRow } from "./StatisticsRow";
