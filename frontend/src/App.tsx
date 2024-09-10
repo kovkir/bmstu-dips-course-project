@@ -4,6 +4,7 @@ import "./App.css";
 import { AuthorizationPage } from './pages/AuthorizationPage';
 import { RegistrationPage } from './pages/RegistrationPage';
 import { AccountPage } from './pages/AccountPage';
+import { StatisticsPage } from './pages/StatisticsPage';
 import { FlightsPage } from './pages/FlightsPage';
 import { TicketsPage } from './pages/TicketsPage';
 import { NetworkErrorPage } from './pages/NetworkErrorPage';
@@ -60,7 +61,7 @@ function App() {
 					{ user && user.role === "ADMIN" &&
 							<Route 
 								path="/statistics" 
-								element={ <div></div> }
+								element={ <StatisticsPage openMiniDrawer={ open }/> }
 							/>
 					}
 					<Route 

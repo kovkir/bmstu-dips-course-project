@@ -11,28 +11,10 @@
 	}
 	.short-page-container {
 		@apply page-container;
-		left: 290px;
+		left: 250px;
 	}
 	.long-page-container {
 		@apply page-container;
 		left: 65px;
-	}
-
-	.short-balance-history-page-container {
-		@apply short-page-container;
-		margin-top: 25%;
-	}
-	.long-balance-history-page-container {
-		@apply long-page-container;
-		margin-top: 15%;
-	}
-
-	.short-user-info-page-container {
-		@apply short-page-container;
-		height: 20%;
-	}
-	.long-user-info-page-container {
-		@apply long-page-container;
-		height: 20%;
 	}
 }

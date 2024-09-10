@@ -21,6 +21,10 @@ export const $apiGateway= axios.create({
   baseURL: 
 		`http://${config.server.gateway.host}:${config.server.gateway.port}/api/v1`,
 });
+export const $apiStatistics= axios.create({
+  baseURL: 
+		`http://${config.server.statistics.host}:${config.server.statistics.port}/api/v1`,
+});
 
 
 $apiUser.interceptors.request.use((config: InternalAxiosRequestConfig) => {
@@ -76,6 +80,37 @@ $apiGateway.interceptors.response.use((config: AxiosResponse) => {
       if (response) {
         localStorage.setItem("accessToken", response.data.access_token as string);
         return $apiGateway.request(originalRequest);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  throw error;
+}));
+
+
+$apiStatistics.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  config.headers.Authorization = `Bearer ${localStorage.getItem("accessToken")}`;
+  return config;
+});
+
+$apiStatistics.interceptors.response.use((config: AxiosResponse) => {
+  return config;
+}, (async (error) => {
+  const originalRequest = error.config;
+  if (error.response.status === 401 && error.config && !error.config._isRetry) {
+    originalRequest._isRetry = true;
+    try {
+      const data = {
+        "refresh_token": localStorage.getItem("refreshToken"),
+      };
+      const response = await $apiAuth.post<IAuthResponse>(`/user/refresh/`, data).catch(_ => {
+        localStorage.clear();
+      });
+      
+      if (response) {
+        localStorage.setItem("accessToken", response.data.access_token as string);
+        return $apiStatistics.request(originalRequest);
       }
     } catch (e) {
       console.log(e);

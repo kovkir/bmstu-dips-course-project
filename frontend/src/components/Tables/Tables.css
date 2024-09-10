@@ -30,6 +30,9 @@
 		min-width: 60rem;
 		background-color: #197aca;
 	}
+	.title-row-without-buttons {
+		@apply title-row pt-2 pb-2.5;
+	}
 	.title-row-item {
 		@apply flex flex-row items-center pl-5 text-xl font-bold;
 	}

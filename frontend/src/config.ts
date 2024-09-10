@@ -4,6 +4,10 @@ export const config = {
       host: "localhost",
       port: 8888,
     },
+    statistics: {
+      host: "localhost",
+      port: 8090,
+    },
     gateway: {
       host: "localhost",
       port: 8080,

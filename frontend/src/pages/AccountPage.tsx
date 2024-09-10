@@ -10,12 +10,10 @@ interface AccountPageProps {
 
 export function AccountPage({ openMiniDrawer, user }: AccountPageProps) {
 	return (
-		<>
-			<div className={`${openMiniDrawer ? "short-page-container" : "long-page-container"}`}>
-				<Account 
-					user={ user }
-				/>
-			</div>
-	</>
+		<div className={`${openMiniDrawer ? "short-page-container" : "long-page-container"}`}>
+			<Account 
+				user={ user }
+			/>
+		</div>
 	)
 }
