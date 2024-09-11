@@ -68,7 +68,7 @@ export function TicketsItem({ ticket, ticketRefund }: TicketsItemProps) {
 								sx={{	fontSize: 18 }}
 								severity="success"
 							>
-								{`Билет отплачен`}
+								{`Билет оплачен`}
 							</Alert>
 						: <Alert
 								sx={{	fontSize: 18 }}
