@@ -15,7 +15,7 @@ export function StatisticsRow(props: StatisticsRowProps) {
 			<div className="row-item basis-1/6">{ props.statistics.method }</div>
 			<div className="row-item basis-1/2">{ props.statistics.url }</div>
 			<div className="row-item basis-1/6">{ props.statistics.status_code }</div>
-			<div className="row-item basis-1/5">{ props.statistics.time }</div>
+			<div className="row-item basis-1/4">{ props.statistics.time }</div>
 		</div>
 	)
 }

@@ -11,7 +11,7 @@
 	}
 	.short-page-container {
 		@apply page-container;
-		left: 250px;
+		left: 260px;
 	}
 	.long-page-container {
 		@apply page-container;

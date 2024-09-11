@@ -11,7 +11,7 @@
 	}
 	.short-table-container {
 		@apply table-container;
-		left: 250px;
+		left: 260px;
 	}
 	.long-table-container {
 		@apply table-container;
@@ -20,7 +20,7 @@
 	.table {
 		@apply container mx-auto min-w-max block rounded-xl;
 		height: 100%;
-		width: 95%;
+		width: 90%;
 		position: relative;
 		box-shadow: 0 0 40px #b5b8bc;
 	}

@@ -11,7 +11,7 @@
 	}
 	.short-board-container {
 		@apply board-container;
-		left: 250px;
+		left: 260px;
 	}
 	.long-board-container {
 		@apply board-container;

@@ -15,7 +15,7 @@ import { IUser } from '../../interfaces/User/IUser';
 import { useDropdownList } from '../../hooks/useDrawers/useDropdownList';
 
 
-export const drawerWidth = 250;
+export const drawerWidth = 260;
 
 const openedMixin = (theme: Theme): CSSObject => ({
 	width: drawerWidth,

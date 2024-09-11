@@ -18,7 +18,7 @@
 	}
 	.short-text-error-page-container {
 		@apply text-error-page-container;
-		left: 250px;
+		left: 260px;
 	}
 	.long-text-error-page-container {
 		@apply text-error-page-container;
